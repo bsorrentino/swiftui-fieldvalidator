@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F14E0892357A96D00586E5F /* FieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F14E0882357A96C00586E5F /* FieldValidator.swift */; };
 		5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486A723568D17007FA51F /* AppDelegate.swift */; };
 		5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486A923568D17007FA51F /* SceneDelegate.swift */; };
 		5F4486AC23568D17007FA51F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486AB23568D17007FA51F /* ContentView.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F14E0882357A96C00586E5F /* FieldValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FieldValidator.swift; path = ../Sources/FieldValidatorLibrary/FieldValidator.swift; sourceTree = "<group>"; };
 		5F4486A423568D17007FA51F /* FieldValidatorSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldValidatorSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F4486A723568D17007FA51F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F4486A923568D17007FA51F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +42,7 @@
 		5F44869B23568D17007FA51F = {
 			isa = PBXGroup;
 			children = (
+				5F14E0882357A96C00586E5F /* FieldValidator.swift */,
 				5F4486A623568D17007FA51F /* FieldValidatorSample */,
 				5F4486A523568D17007FA51F /* Products */,
 			);
@@ -146,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F14E0892357A96D00586E5F /* FieldValidator.swift in Sources */,
 				5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */,
 				5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */,
 				5F4486AC23568D17007FA51F /* ContentView.swift in Sources */,

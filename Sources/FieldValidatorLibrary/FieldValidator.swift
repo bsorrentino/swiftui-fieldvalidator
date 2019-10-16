@@ -15,12 +15,14 @@ import Combine
 @available(iOS 13.0, *)
 public struct FieldChecker {
     
-    public var errorMessage:String? = nil
+    public var errorMessage:String?
     
     public var valid:Bool {
          self.errorMessage == nil
      }
-    public init() {}
+    public init( errorMessage:String? = nil ) {
+        self.errorMessage = errorMessage
+    }
 }
 
 @available(iOS 13.0, *)
