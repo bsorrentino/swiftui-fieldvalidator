@@ -58,7 +58,7 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
         self._checker = checker
     }
     
-    func doValidate( _ newValue:T? = nil ) -> Void {
+    public func doValidate( _ newValue:T? = nil ) -> Void {
                 
         self.checker.errorMessage =
                         (newValue != nil) ?
