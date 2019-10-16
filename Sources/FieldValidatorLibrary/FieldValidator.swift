@@ -104,3 +104,38 @@ public struct TextFieldWithValidator : View {
         }
     }
 }
+
+@available(iOS 13.0, *)
+public struct SecureFieldWithValidator : View {
+    // specialize validator for TestField ( T = String )
+    public typealias Validator = (String) -> String?
+    
+    var title:String?
+    
+    @ObservedObject var field:FieldValidator<String>
+    
+    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+        self.title = title;
+        self.field = FieldValidator(value, checker:checker, validator:validator )
+        
+    }
+
+    public var body: some View {
+        VStack {
+            SecureField( title ?? "", text: $field.value )
+                .padding(.all)
+                .border( field.isValid ? Color.clear : Color.red )
+                .background(Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0))
+                .onAppear { // run validation on appear
+                    self.field.doValidate()
+                }
+                if( !field.isValid  ) {
+                    Text( field.errorMessage ?? "" )
+                        .fontWeight(.light)
+                        .font(.footnote)
+                        .foregroundColor(Color.red)
+
+                }
+        }
+    }
+}

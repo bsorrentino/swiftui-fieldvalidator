@@ -47,7 +47,7 @@ struct FormWithValidator : View {
                  .autocapitalization(.none)
 
 
-    TextFieldWithValidator( title:"password",
+    SecureFieldWithValidator( title:"password",
                             value: $item.password, checker:$passwordValid ) { v in
                       // validation closure where ‘v’ is the current value
                          
