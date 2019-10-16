@@ -15,9 +15,9 @@ import Combine
 @available(iOS 13.0, *)
 public struct FieldChecker {
     
-    var errorMessage:String? = nil
+    public var errorMessage:String? = nil
     
-    var valid:Bool {
+    public var valid:Bool {
          self.errorMessage == nil
      }
 
@@ -25,7 +25,7 @@ public struct FieldChecker {
 
 @available(iOS 13.0, *)
 public class FieldValidator<T> : ObservableObject where T : Hashable {
-    typealias Validator = (T) -> String?
+    public typealias Validator = (T) -> String?
     
     @Binding private var bindValue:T
     @Binding private var checker:FieldChecker
@@ -71,7 +71,7 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
 @available(iOS 13.0, *)
 public struct TextFieldWithValidator : View {
     // specialize validator for TestField ( T = String )
-    typealias Validator = (String) -> String?
+    public typealias Validator = (String) -> String?
     
     var title:String?
     
