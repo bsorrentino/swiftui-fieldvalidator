@@ -20,7 +20,7 @@ public struct FieldChecker {
     public var valid:Bool {
          self.errorMessage == nil
      }
-
+    public init() {}
 }
 
 @available(iOS 13.0, *)
