@@ -30,7 +30,7 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
     @Binding private var bindValue:T
     @Binding private var checker:FieldChecker
     
-    @Published var value:T
+    @Published public var value:T
     {
         willSet {
             self.doValidate(newValue)
@@ -41,15 +41,15 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
     }
     private let validator:Validator
     
-    var isValid:Bool {
+    public var isValid:Bool {
         self.checker.valid
     }
     
-    var errorMessage:String? {
+    public var errorMessage:String? {
         self.checker.errorMessage
     }
     
-    init( _ value:Binding<T>, checker:Binding<FieldChecker>, validator:@escaping Validator  ) {
+    public init( _ value:Binding<T>, checker:Binding<FieldChecker>, validator:@escaping Validator  ) {
         self.validator = validator
         self._bindValue = value
         self.value = value.wrappedValue
@@ -77,7 +77,7 @@ public struct TextFieldWithValidator : View {
     
     @ObservedObject var field:FieldValidator<String>
     
-    init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
         

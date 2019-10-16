@@ -13,7 +13,6 @@
 		5F4486AE23568D18007FA51F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F4486AD23568D18007FA51F /* Assets.xcassets */; };
 		5F4486B123568D18007FA51F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F4486B023568D18007FA51F /* Preview Assets.xcassets */; };
 		5F4486B423568D18007FA51F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4486B223568D18007FA51F /* LaunchScreen.storyboard */; };
-		5FFB33C723575CA500D9AB4C /* FieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFB33C623575CA500D9AB4C /* FieldValidator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +24,6 @@
 		5F4486B023568D18007FA51F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5F4486B323568D18007FA51F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F4486B523568D18007FA51F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5FFB33C623575CA500D9AB4C /* FieldValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FieldValidator.swift; path = ../Sources/FieldValidatorLibrary/FieldValidator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +40,6 @@
 		5F44869B23568D17007FA51F = {
 			isa = PBXGroup;
 			children = (
-				5FFB33C623575CA500D9AB4C /* FieldValidator.swift */,
 				5F4486A623568D17007FA51F /* FieldValidatorSample */,
 				5F4486A523568D17007FA51F /* Products */,
 			);
@@ -149,7 +146,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FFB33C723575CA500D9AB4C /* FieldValidator.swift in Sources */,
 				5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */,
 				5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */,
 				5F4486AC23568D17007FA51F /* ContentView.swift in Sources */,
