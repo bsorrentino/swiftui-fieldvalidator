@@ -88,18 +88,8 @@ public struct TextFieldWithValidator : View {
     public var body: some View {
         VStack {
             TextField( title ?? "", text: $field.value )
-                .padding(.all)
-                .border( field.isValid ? Color.clear : Color.red )
-                .background(Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0))
                 .onAppear { // run validation on appear
                     self.field.doValidate()
-                }
-                if( !field.isValid  ) {
-                    Text( field.errorMessage ?? "" )
-                        .fontWeight(.light)
-                        .font(.footnote)
-                        .foregroundColor(Color.red)
-
                 }
         }
     }
@@ -123,18 +113,8 @@ public struct SecureFieldWithValidator : View {
     public var body: some View {
         VStack {
             SecureField( title ?? "", text: $field.value )
-                .padding(.all)
-                .border( field.isValid ? Color.clear : Color.red )
-                .background(Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0))
                 .onAppear { // run validation on appear
                     self.field.doValidate()
-                }
-                if( !field.isValid  ) {
-                    Text( field.errorMessage ?? "" )
-                        .fontWeight(.light)
-                        .font(.footnote)
-                        .foregroundColor(Color.red)
-
                 }
         }
     }
