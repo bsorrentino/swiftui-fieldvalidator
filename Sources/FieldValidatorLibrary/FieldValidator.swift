@@ -70,7 +70,7 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
 
 // MARK:  FORM FIELD
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 public struct TextFieldWithValidator : View {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
@@ -95,7 +95,7 @@ public struct TextFieldWithValidator : View {
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 public struct SecureFieldWithValidator : View {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
