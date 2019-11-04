@@ -12,7 +12,7 @@ import Combine
 
 // MARK:  FIELD VALIDATION
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 public struct FieldChecker {
     
     public var errorMessage:String?
@@ -25,7 +25,7 @@ public struct FieldChecker {
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 public class FieldValidator<T> : ObservableObject where T : Hashable {
     public typealias Validator = (T) -> String?
     
