@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  spec.name         = "fieldvalidator"
+  spec.name         = "FieldValidatorLibrary"
   spec.version      = "1.0.0"
   spec.summary      = "SwiftUI library supporting 'Form Validation'"
 
@@ -65,10 +65,10 @@ Pod::Spec.new do |spec|
   #
 
   # spec.platform     = :ios
-  spec.platform     = :ios, "13"
+  spec.platform     = :ios
 
   #  When using multiple platforms
-  # spec.ios.deployment_target = "5.0"
+  spec.ios.deployment_target = "13.0"
   # spec.osx.deployment_target = "10.7"
   # spec.watchos.deployment_target = "2.0"
   # spec.tvos.deployment_target = "9.0"
