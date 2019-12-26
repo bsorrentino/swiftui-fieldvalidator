@@ -29,8 +29,10 @@ struct FormWithValidator : View {
 
     func username() -> some View {
         VStack {
-            TextFieldWithValidator( title:"username",
-                                value: $item.username, checker:$usernameValid ) { v in
+            TextFieldWithValidator( title: "username",
+                                value: $item.username,
+                                checker: $usernameValid,
+                                onCommit: submit) { v in
                          // validation closure where ‘v’ is the current value
                                                    
                             if( v.isEmpty ) {
@@ -57,8 +59,10 @@ struct FormWithValidator : View {
     
     func password() -> some View {
         VStack {
-            SecureFieldWithValidator( title:"password",
-                                    value: $item.password, checker:$passwordValid ) { v in
+            SecureFieldWithValidator( title: "password",
+                                    value: $item.password,
+                                    checker: $passwordValid,
+                                    onCommit: submit) { v in
                               // validation closure where ‘v’ is the current value
                                  
                                  if( v.isEmpty ) {
@@ -83,6 +87,16 @@ struct FormWithValidator : View {
 
     }
 
+    var isValid:Bool {
+        passwordValid.valid && usernameValid.valid
+    }
+    
+    func submit() {
+        if( isValid ) {
+            print( "submit:\nusername:\(self.item.username)\npassword:\(self.item.password)")
+        }
+    }
+    
 var body: some View {
   
   Form {
@@ -98,9 +112,11 @@ var body: some View {
    Section {
 
     Button( "Submit" ) {
+        
+        self.submit()
     }
     // enable button only if username and password are valid
-   .disabled( !(passwordValid.valid && usernameValid.valid) )
+        .disabled( !self.isValid )
    } // end of section
 
   } // end of form
