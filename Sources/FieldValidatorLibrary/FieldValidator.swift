@@ -74,20 +74,29 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
 public struct TextFieldWithValidator : View {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
-    
+
     var title:String?
-    
+    var onCommit:() -> Void
+
     @ObservedObject var field:FieldValidator<String>
-    
-    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+
+    public init( title:String = "",
+              value:Binding<String>,
+              checker:Binding<FieldChecker>,
+              onCommit: @escaping () -> Void,
+              validator:@escaping Validator ) {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
-        
+        self.onCommit = onCommit
+    }
+
+    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+        self.init( title:title, value:value, checker:checker, onCommit:{}, validator:validator)
     }
 
     public var body: some View {
         VStack {
-            TextField( title ?? "", text: $field.value )
+            TextField( title ?? "", text: $field.value, onCommit: self.onCommit )
                 .onAppear { // run validation on appear
                     self.field.doValidate()
                 }
@@ -99,20 +108,29 @@ public struct TextFieldWithValidator : View {
 public struct SecureFieldWithValidator : View {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
-    
+
     var title:String?
-    
+    var onCommit:() -> Void
+
     @ObservedObject var field:FieldValidator<String>
-    
-    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+
+    public init( title:String = "",
+              value:Binding<String>,
+              checker:Binding<FieldChecker>,
+              onCommit: @escaping () -> Void,
+              validator:@escaping Validator ) {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
-        
+        self.onCommit = onCommit
+    }
+
+    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+        self.init( title:title, value:value, checker:checker, onCommit:{}, validator:validator)
     }
 
     public var body: some View {
         VStack {
-            SecureField( title ?? "", text: $field.value )
+            SecureField( title ?? "", text: $field.value, onCommit: self.onCommit )
                 .onAppear { // run validation on appear
                     self.field.doValidate()
                 }
