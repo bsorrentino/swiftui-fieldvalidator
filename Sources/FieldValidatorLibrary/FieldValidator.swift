@@ -80,12 +80,6 @@ public struct TextFieldWithValidator : View {
 
     @ObservedObject var field:FieldValidator<String>
 
-    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
-        self.title = title;
-        self.field = FieldValidator(value, checker:checker, validator:validator )
-        self.onCommit = {}
-    }
-
     public init( title:String = "",
               value:Binding<String>,
               checker:Binding<FieldChecker>,
@@ -94,6 +88,10 @@ public struct TextFieldWithValidator : View {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
         self.onCommit = onCommit
+    }
+
+    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+        self.init( title:title, value:value, checker:checker, onCommit:{}, validator:validator)
     }
 
     public var body: some View {
@@ -116,12 +114,6 @@ public struct SecureFieldWithValidator : View {
 
     @ObservedObject var field:FieldValidator<String>
 
-    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
-        self.title = title;
-        self.field = FieldValidator(value, checker:checker, validator:validator )
-        self.onCommit = {}
-    }
-
     public init( title:String = "",
               value:Binding<String>,
               checker:Binding<FieldChecker>,
@@ -130,6 +122,10 @@ public struct SecureFieldWithValidator : View {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
         self.onCommit = onCommit
+    }
+
+    public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
+        self.init( title:title, value:value, checker:checker, onCommit:{}, validator:validator)
     }
 
     public var body: some View {
