@@ -18,6 +18,19 @@ class DataItem: ObservableObject { // observable object
  
 }
 
+enum PasswordType: Int, Hashable {
+    
+    case classic
+    case toggle
+
+    var text:String {
+        switch( self ) {
+            case .classic: return "classic"
+            case .toggle: return "toggle"
+        }
+    }
+
+}
 
 
 struct FormWithValidator : View {
@@ -26,7 +39,19 @@ struct FormWithValidator : View {
 
     @State var usernameValid = FieldChecker() // validation state of username field
     @State var passwordValid = FieldChecker() // validation state of password field
+    @State var passwordHidden = true
+    @State var passwordType:PasswordType = .classic
+    
+   func passwordTypePicker() -> some View {
+       
+       Picker( selection: $passwordType, label: EmptyView() ) {
+           Text(PasswordType.classic.text).tag(PasswordType.classic)
+           Text(PasswordType.toggle.text).tag(PasswordType.toggle)
+       }
+       .pickerStyle(SegmentedPickerStyle())
 
+   }
+    
     func username() -> some View {
         VStack {
             TextFieldWithValidator( title: "username",
@@ -55,6 +80,49 @@ struct FormWithValidator : View {
 
         }
 
+    }
+    
+    func passwordToggle() -> some View  {
+        VStack {
+            HStack {
+                PasswordToggleField( value:$item.password,
+                                     checker:$passwordValid,
+                                     hidden:$passwordHidden ) { v in
+                                        if( v.isEmpty ) {
+                                            return "password cannot be empty"
+                                        }
+                                        return nil
+                }
+                .autocapitalization(.none)
+                Button( action: {
+                    self.passwordHidden.toggle()
+                }) {
+                    Group {
+                        if( passwordHidden ) {
+                            Image( systemName: "eye.slash")
+                        }
+                        else {
+                            Image( systemName: "eye")
+                        }
+                    }
+                    .foregroundColor(Color.black)
+                }
+                
+            }
+            .padding( 10.0 )
+            .overlay( RoundedRectangle(cornerRadius: 10)
+                .stroke(lineWidth: 0.5 )
+                .foregroundColor(passwordValid.valid ? Color.black : Color.red))
+            if( !passwordValid.valid  ) {
+                Text( passwordValid.errorMessage ?? "" )
+                    .fontWeight(.light)
+                    .font(.footnote)
+                    .foregroundColor(Color.red)
+
+            }
+        }
+        
+ 
     }
     
     func password() -> some View {
@@ -97,30 +165,39 @@ struct FormWithValidator : View {
         }
     }
     
-var body: some View {
-  
-  Form {
-
-
-   Section {
-
-        username()
-        password()
-
-   } // end of section
-
-   Section {
-
-    Button( "Submit" ) {
+    var body: some View {
         
-        self.submit()
+        NavigationView {
+        Form {
+            
+            Section {
+                
+                username()
+                
+                if( self.passwordType == .classic  ) {
+                    password()
+                }
+                else {
+                    passwordToggle()
+                }
+                
+            } // end of section
+            
+            Section {
+                
+                Button( "Submit" ) {
+                    
+                    self.submit()
+                }
+                    // enable button only if username and password are valid
+                    .disabled( !self.isValid )
+            } // end of section
+            
+        } // end of form
+           .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
+            .navigationBarItems(trailing: passwordTypePicker() )
+        } // NavigationView
     }
-    // enable button only if username and password are valid
-        .disabled( !self.isValid )
-   } // end of section
-
-  } // end of form
- }
 }
 
 #if DEBUG
