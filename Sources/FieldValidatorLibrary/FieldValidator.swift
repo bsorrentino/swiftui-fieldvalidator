@@ -76,7 +76,7 @@ public struct TextFieldWithValidator : View {
     public typealias Validator = (String) -> String?
 
     var title:String?
-    var onCommit:() -> Void
+    var onCommit:() -> Void = {}
 
     @ObservedObject var field:FieldValidator<String>
 
@@ -87,7 +87,7 @@ public struct TextFieldWithValidator : View {
               validator:@escaping Validator ) {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
-        self.onCommit = onCommit
+        self.onCommit = execIfValid(onCommit)
     }
 
     public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
@@ -100,6 +100,14 @@ public struct TextFieldWithValidator : View {
                 .onAppear { // run validation on appear
                     self.field.doValidate()
                 }
+        }
+    }
+    
+    private func execIfValid( _ onCommit: @escaping () -> Void ) -> () -> Void {
+        return {
+            if( self.field.isValid ) {
+                onCommit()
+            }
         }
     }
 }
@@ -121,7 +129,7 @@ public struct SecureFieldWithValidator : View {
               validator:@escaping Validator ) {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
-        self.onCommit = onCommit
+        self.onCommit = execIfValid(onCommit)
     }
 
     public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
@@ -136,4 +144,13 @@ public struct SecureFieldWithValidator : View {
                 }
         }
     }
+
+    private func execIfValid( _ onCommit: @escaping () -> Void ) -> () -> Void {
+        return {
+            if( self.field.isValid ) {
+                onCommit()
+            }
+        }
+    }
+
 }
