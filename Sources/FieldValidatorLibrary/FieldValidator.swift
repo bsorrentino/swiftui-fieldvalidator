@@ -71,7 +71,25 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
 // MARK:  FORM FIELD
 
 @available(iOS 13, *)
-public struct TextFieldWithValidator : View {
+protocol ViewWithFieldValidator : View {
+    var field:FieldValidator<String> {get}
+    
+}
+
+extension ViewWithFieldValidator {
+    
+    internal func execIfValid( _ onCommit: @escaping () -> Void ) -> () -> Void {
+        return {
+            if( self.field.isValid ) {
+                onCommit()
+            }
+        }
+    }
+
+
+}
+@available(iOS 13, *)
+public struct TextFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
 
@@ -87,7 +105,7 @@ public struct TextFieldWithValidator : View {
               validator:@escaping Validator ) {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
-        self.onCommit = execIfValid(onCommit)
+        self.onCommit = onCommit
     }
 
     public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
@@ -96,24 +114,17 @@ public struct TextFieldWithValidator : View {
 
     public var body: some View {
         VStack {
-            TextField( title ?? "", text: $field.value, onCommit: self.onCommit )
+            TextField( title ?? "", text: $field.value, onCommit: execIfValid(self.onCommit) )
                 .onAppear { // run validation on appear
                     self.field.doValidate()
                 }
         }
     }
     
-    private func execIfValid( _ onCommit: @escaping () -> Void ) -> () -> Void {
-        return {
-            if( self.field.isValid ) {
-                onCommit()
-            }
-        }
-    }
 }
 
 @available(iOS 13, *)
-public struct SecureFieldWithValidator : View {
+public struct SecureFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
 
@@ -129,7 +140,7 @@ public struct SecureFieldWithValidator : View {
               validator:@escaping Validator ) {
         self.title = title;
         self.field = FieldValidator(value, checker:checker, validator:validator )
-        self.onCommit = execIfValid(onCommit)
+        self.onCommit = onCommit
     }
 
     public init( title:String = "", value:Binding<String>, checker:Binding<FieldChecker>, validator:@escaping Validator ) {
@@ -138,18 +149,10 @@ public struct SecureFieldWithValidator : View {
 
     public var body: some View {
         VStack {
-            SecureField( title ?? "", text: $field.value, onCommit: self.onCommit )
+            SecureField( title ?? "", text: $field.value, onCommit: execIfValid(self.onCommit) )
                 .onAppear { // run validation on appear
                     self.field.doValidate()
                 }
-        }
-    }
-
-    private func execIfValid( _ onCommit: @escaping () -> Void ) -> () -> Void {
-        return {
-            if( self.field.isValid ) {
-                onCommit()
-            }
         }
     }
 
