@@ -14,5 +14,5 @@ This Library is compatible with [Cocoapods](https://cocoapods.org).
 
 In your **Podfile** add
 ```
-pod 'FieldValidatorLibrary', :git => 'https://github.com/bsorrentino/swiftui-fieldvalidator.git'
+pod 'FieldValidatorLibrary', '~> 1.2.0'
 ```
