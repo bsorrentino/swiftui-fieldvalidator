@@ -71,12 +71,30 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
 // MARK:  FORM FIELD
 
 @available(iOS 13, *)
-public struct TextFieldWithValidator : View {
+protocol ViewWithFieldValidator : View {
+    var field:FieldValidator<String> {get}
+    
+}
+
+extension ViewWithFieldValidator {
+    
+    internal func execIfValid( _ onCommit: @escaping () -> Void ) -> () -> Void {
+        return {
+            if( self.field.isValid ) {
+                onCommit()
+            }
+        }
+    }
+
+
+}
+@available(iOS 13, *)
+public struct TextFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
 
     var title:String?
-    var onCommit:() -> Void
+    var onCommit:() -> Void = {}
 
     @ObservedObject var field:FieldValidator<String>
 
@@ -96,16 +114,17 @@ public struct TextFieldWithValidator : View {
 
     public var body: some View {
         VStack {
-            TextField( title ?? "", text: $field.value, onCommit: self.onCommit )
+            TextField( title ?? "", text: $field.value, onCommit: execIfValid(self.onCommit) )
                 .onAppear { // run validation on appear
                     self.field.doValidate()
                 }
         }
     }
+    
 }
 
 @available(iOS 13, *)
-public struct SecureFieldWithValidator : View {
+public struct SecureFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )
     public typealias Validator = (String) -> String?
 
@@ -130,10 +149,11 @@ public struct SecureFieldWithValidator : View {
 
     public var body: some View {
         VStack {
-            SecureField( title ?? "", text: $field.value, onCommit: self.onCommit )
+            SecureField( title ?? "", text: $field.value, onCommit: execIfValid(self.onCommit) )
                 .onAppear { // run validation on appear
                     self.field.doValidate()
                 }
         }
     }
+
 }

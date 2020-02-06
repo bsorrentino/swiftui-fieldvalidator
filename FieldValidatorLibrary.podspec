@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "FieldValidatorLibrary"
-  spec.version      = "1.1.1"
+  spec.version      = "1.2.0"
   spec.summary      = "SwiftUI library supporting 'Form Validation'"
 
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-        SwiftUI library supporting Fields Form Validation 
+        SwiftUI library supporting Fields Form Validation
                    DESC
 
   spec.homepage     = "https://soulsoftware-bsc.blogspot.com/2019/10/build-field-validator-for-swiftui.html"
@@ -82,7 +82,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/bsorrentino/swiftui-fieldvalidator.git", :tag => "v1.1.1" }
+  spec.source       = { :git => "https://github.com/bsorrentino/swiftui-fieldvalidator.git", :tag => "v1.2.0" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
