@@ -1,14 +1,16 @@
-# FieldValidatorLibrary
+## Field Validator Library for SwiftUI
 
 [SwiftUI](https://developer.apple.com/documentation/swiftui) [Package](https://swift.org/package-manager/) supporting "Form Validation"
 
-# Import library
+Take a look to [Build field validator for SwiftUI](https://soulsoftware-bsc.blogspot.com/2019/10/build-field-validator-for-swiftui.html)
 
-## Swift Package Manager
+## Import library
+
+### Swift Package Manager
 
 This Library is compatible with [Swift Package Manager](https://swift.org/package-manager/)
 
-## Cocoapods
+### Cocoapods
 
 This Library is compatible with [Cocoapods](https://cocoapods.org).
 
