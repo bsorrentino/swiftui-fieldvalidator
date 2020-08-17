@@ -66,92 +66,69 @@ struct FormWithValidator : View {
                             
                             return nil
                     }
-                    .padding(.all)
-                    .border( usernameValid.valid ? Color.clear : Color.red )
-                    .background(Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0))
                     .autocapitalization(.none)
-            if( !usernameValid.valid  ) {
-                Text( usernameValid.errorMessage ?? "" )
-                    .fontWeight(.light)
-                    .font(.footnote)
-                    .foregroundColor(Color.red)
-
-            }
+                    .padding( EdgeInsets(top:5, leading: 0, bottom: 25, trailing: 0) )
+                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessage )
+                        ,alignment: .bottom)
 
         }
 
     }
     
     func passwordToggle() -> some View  {
-        VStack {
-            HStack {
-                PasswordToggleField( value:$item.password,
-                                     checker:$passwordValid,
-                                     hidden:$passwordHidden ) { v in
-                                        if( v.isEmpty ) {
-                                            return "password cannot be empty"
-                                        }
-                                        return nil
-                }
-                .autocapitalization(.none)
-                Button( action: {
-                    self.passwordHidden.toggle()
-                }) {
-                    Group {
-                        if( passwordHidden ) {
-                            Image( systemName: "eye.slash")
-                        }
-                        else {
-                            Image( systemName: "eye")
-                        }
+        
+        HStack {
+            PasswordToggleField( value:$item.password,
+                                 checker:$passwordValid,
+                                 hidden:$passwordHidden ) { v in
+                                    if( v.isEmpty ) {
+                                        return "password cannot be empty"
+                                    }
+                                    return nil
+            }
+            .autocapitalization(.none)
+            Button( action: {
+                self.passwordHidden.toggle()
+            }) {
+                Group {
+                    if( passwordHidden ) {
+                        Image( systemName: "eye.slash")
                     }
-                    .foregroundColor(Color.black)
+                    else {
+                        Image( systemName: "eye")
+                    }
                 }
-                
+                .foregroundColor(Color.black)
             }
-            .padding( 10.0 )
-            .overlay( RoundedRectangle(cornerRadius: 10)
-                .stroke(lineWidth: 0.5 )
-                .foregroundColor(passwordValid.valid ? Color.black : Color.red))
-            if( !passwordValid.valid  ) {
-                Text( passwordValid.errorMessage ?? "" )
-                    .fontWeight(.light)
-                    .font(.footnote)
-                    .foregroundColor(Color.red)
-
-            }
+            
         }
+        .padding( EdgeInsets(top:5, leading: 0, bottom: 25, trailing: 0) )
+        .overlay( ValidatorMessageInline( message: passwordValid.errorMessage )
+            ,alignment: .bottom)
+        
         
  
     }
     
     func password() -> some View {
-        VStack {
-            SecureFieldWithValidator( title: "password",
-                                    value: $item.password,
-                                    checker: $passwordValid,
-                                    onCommit: submit) { v in
-                              // validation closure where ‘v’ is the current value
-                                 
-                                 if( v.isEmpty ) {
-                                     return "password cannot be empty"
-                                 }
-                                 
-                                 return nil
-                         }
-                        .padding(.all)
-                        .border( passwordValid.valid ? Color.clear : Color.red )
-                        .background(Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0))
-                        .autocapitalization(.none)
-            if( !passwordValid.valid  ) {
-                Text( passwordValid.errorMessage ?? "" )
-                    .fontWeight(.light)
-                    .font(.footnote)
-                    .foregroundColor(Color.red)
+        
+        SecureFieldWithValidator( title: "give me the password",
+                                value: $item.password,
+                                checker: $passwordValid,
+                                onCommit: submit) { v in
+                          // validation closure where ‘v’ is the current value
+                             
+                             if( v.isEmpty ) {
+                                 return "password cannot be empty"
+                             }
+                             
+                             return nil
+                     }
+                    .padding( EdgeInsets(top:5, leading: 0, bottom: 25, trailing: 0) )
+                    .overlay( ValidatorMessageInline( message: passwordValid.errorMessage )
+                        ,alignment: .bottom)
 
-            }
-
-        }
+        
 
     }
 
@@ -203,8 +180,16 @@ struct FormWithValidator : View {
 #if DEBUG
 struct FormVithValidator_Previews: PreviewProvider {
     static var previews: some View {
-        FormWithValidator()
-            .environmentObject( DataItem() )
+        Group {
+            FormWithValidator()
+                .environment(\.colorScheme, .light)
+                .environmentObject( DataItem() )
+            FormWithValidator()
+                .environment(\.colorScheme, .dark)
+                .environmentObject( DataItem() )
+         }
+
+        
     }
 }
 #endif
