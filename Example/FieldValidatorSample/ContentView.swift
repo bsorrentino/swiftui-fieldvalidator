@@ -33,12 +33,24 @@ enum PasswordType: Int, Hashable {
 }
 
 
+extension FieldChecker {
+    var padding:EdgeInsets {
+        ( !self.valid && !self.isFirstCheck ) ? .init(top:5, leading: 0, bottom: 25, trailing: 0) : .init()
+    }
+    
+    var errorMessageOrNilAtBeginning:String?  {
+        self.isFirstCheck ? nil : errorMessage
+    }
+}
+
 struct FormWithValidator : View {
 
     @EnvironmentObject var item:DataItem // data model reference
 
     @State var usernameValid = FieldChecker() // validation state of username field
     @State var passwordValid = FieldChecker() // validation state of password field
+    
+    @State var passwordToggleValid = FieldChecker() // validation state of password field
     @State var passwordHidden = true
     @State var passwordType:PasswordType = .classic
     
@@ -53,8 +65,8 @@ struct FormWithValidator : View {
    }
     
     func username() -> some View {
-        VStack {
-            TextFieldWithValidator( title: "username",
+
+        TextFieldWithValidator( title: "username",
                                 value: $item.username,
                                 checker: $usernameValid,
                                 onCommit: submit) { v in
@@ -66,92 +78,64 @@ struct FormWithValidator : View {
                             
                             return nil
                     }
-                    .padding(.all)
-                    .border( usernameValid.valid ? Color.clear : Color.red )
-                    .background(Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0))
                     .autocapitalization(.none)
-            if( !usernameValid.valid  ) {
-                Text( usernameValid.errorMessage ?? "" )
-                    .fontWeight(.light)
-                    .font(.footnote)
-                    .foregroundColor(Color.red)
-
-            }
-
-        }
+                    .padding( usernameValid.padding )
+                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning ),alignment: .bottom)
 
     }
     
     func passwordToggle() -> some View  {
-        VStack {
-            HStack {
-                PasswordToggleField( value:$item.password,
-                                     checker:$passwordValid,
-                                     hidden:$passwordHidden ) { v in
-                                        if( v.isEmpty ) {
-                                            return "password cannot be empty"
-                                        }
-                                        return nil
-                }
-                .autocapitalization(.none)
-                Button( action: {
-                    self.passwordHidden.toggle()
-                }) {
-                    Group {
-                        if( passwordHidden ) {
-                            Image( systemName: "eye.slash")
-                        }
-                        else {
-                            Image( systemName: "eye")
-                        }
+        
+        HStack {
+            PasswordToggleField( value:$item.password,
+                                 checker:$passwordToggleValid,
+                                 hidden:$passwordHidden ) { v in
+                                    if( v.isEmpty ) {
+                                        return "password cannot be empty"
+                                    }
+                                    return nil
+            }
+            .autocapitalization(.none)
+            .padding( passwordToggleValid.padding )
+            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessageOrNilAtBeginning ),alignment: .bottom)
+            Button( action: {
+                self.passwordHidden.toggle()
+            }) {
+                Group {
+                    if( passwordHidden ) {
+                        Image( systemName: "eye.slash")
                     }
-                    .foregroundColor(Color.black)
+                    else {
+                        Image( systemName: "eye")
+                    }
                 }
-                
+                .foregroundColor(Color.black)
             }
-            .padding( 10.0 )
-            .overlay( RoundedRectangle(cornerRadius: 10)
-                .stroke(lineWidth: 0.5 )
-                .foregroundColor(passwordValid.valid ? Color.black : Color.red))
-            if( !passwordValid.valid  ) {
-                Text( passwordValid.errorMessage ?? "" )
-                    .fontWeight(.light)
-                    .font(.footnote)
-                    .foregroundColor(Color.red)
-
-            }
+            
         }
         
- 
+        
     }
     
     func password() -> some View {
-        VStack {
-            SecureFieldWithValidator( title: "password",
-                                    value: $item.password,
-                                    checker: $passwordValid,
-                                    onCommit: submit) { v in
-                              // validation closure where ‘v’ is the current value
-                                 
-                                 if( v.isEmpty ) {
-                                     return "password cannot be empty"
-                                 }
-                                 
-                                 return nil
-                         }
-                        .padding(.all)
-                        .border( passwordValid.valid ? Color.clear : Color.red )
-                        .background(Color(red: 239.0/255.0, green: 243.0/255.0, blue: 244.0/255.0, opacity: 1.0))
-                        .autocapitalization(.none)
-            if( !passwordValid.valid  ) {
-                Text( passwordValid.errorMessage ?? "" )
-                    .fontWeight(.light)
-                    .font(.footnote)
-                    .foregroundColor(Color.red)
+        
+        SecureFieldWithValidator( title: "give me the password",
+                                value: $item.password,
+                                checker: $passwordValid,
+                                onCommit: submit) { v in
+                          // validation closure where ‘v’ is the current value
+                             
+                             if( v.isEmpty ) {
+                                 return "password cannot be empty"
+                             }
+                             
+                             return nil
+                     }
+                    .padding( passwordValid.padding )
+                    .overlay( ValidatorMessageInline( message: passwordValid.errorMessageOrNilAtBeginning )
+                        ,alignment: .bottom)
 
-            }
-
-        }
+        
 
     }
 
@@ -203,8 +187,16 @@ struct FormWithValidator : View {
 #if DEBUG
 struct FormVithValidator_Previews: PreviewProvider {
     static var previews: some View {
-        FormWithValidator()
-            .environmentObject( DataItem() )
+        Group {
+            FormWithValidator()
+                .environment(\.colorScheme, .light)
+                .environmentObject( DataItem() )
+            FormWithValidator()
+                .environment(\.colorScheme, .dark)
+                .environmentObject( DataItem() )
+         }
+
+        
     }
 }
 #endif

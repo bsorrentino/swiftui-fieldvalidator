@@ -15,8 +15,11 @@ import Combine
 @available(iOS 13, *)
 public struct FieldChecker {
     
+    internal var numberOfCheck = 0
     public var errorMessage:String?
     
+    public var isFirstCheck:Bool { numberOfCheck == 1 }
+
     public var valid:Bool {
          self.errorMessage == nil
      }
@@ -43,13 +46,9 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
     }
     private let validator:Validator
     
-    public var isValid:Bool {
-        self.checker.valid
-    }
+    public var isValid:Bool { self.checker.valid }
     
-    public var errorMessage:String? {
-        self.checker.errorMessage
-    }
+    public var errorMessage:String? { self.checker.errorMessage }
     
     public init( _ value:Binding<T>, checker:Binding<FieldChecker>, validator:@escaping Validator  ) {
         self.validator = validator
@@ -59,11 +58,12 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
     }
     
     public func doValidate( _ newValue:T? = nil ) -> Void {
-                
+        
         self.checker.errorMessage =
                         (newValue != nil) ?
                             self.validator( newValue! ) :
                             self.validator( self.value )
+        self.checker.numberOfCheck += 1
     }
 }
 
