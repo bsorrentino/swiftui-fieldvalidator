@@ -33,12 +33,24 @@ enum PasswordType: Int, Hashable {
 }
 
 
+extension FieldChecker {
+    var padding:EdgeInsets {
+        ( !self.valid && !self.isFirstCheck ) ? .init(top:5, leading: 0, bottom: 25, trailing: 0) : .init()
+    }
+    
+    var errorMessageOrNilAtBeginning:String?  {
+        self.isFirstCheck ? nil : errorMessage
+    }
+}
+
 struct FormWithValidator : View {
 
     @EnvironmentObject var item:DataItem // data model reference
 
     @State var usernameValid = FieldChecker() // validation state of username field
     @State var passwordValid = FieldChecker() // validation state of password field
+    
+    @State var passwordToggleValid = FieldChecker() // validation state of password field
     @State var passwordHidden = true
     @State var passwordType:PasswordType = .classic
     
@@ -53,8 +65,8 @@ struct FormWithValidator : View {
    }
     
     func username() -> some View {
-        VStack {
-            TextFieldWithValidator( title: "username",
+
+        TextFieldWithValidator( title: "username",
                                 value: $item.username,
                                 checker: $usernameValid,
                                 onCommit: submit) { v in
@@ -67,11 +79,8 @@ struct FormWithValidator : View {
                             return nil
                     }
                     .autocapitalization(.none)
-                    .padding( EdgeInsets(top:5, leading: 0, bottom: 25, trailing: 0) )
-                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessage )
-                        ,alignment: .bottom)
-
-        }
+                    .padding( usernameValid.padding )
+                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning ),alignment: .bottom)
 
     }
     
@@ -79,7 +88,7 @@ struct FormWithValidator : View {
         
         HStack {
             PasswordToggleField( value:$item.password,
-                                 checker:$passwordValid,
+                                 checker:$passwordToggleValid,
                                  hidden:$passwordHidden ) { v in
                                     if( v.isEmpty ) {
                                         return "password cannot be empty"
@@ -87,6 +96,8 @@ struct FormWithValidator : View {
                                     return nil
             }
             .autocapitalization(.none)
+            .padding( passwordToggleValid.padding )
+            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessageOrNilAtBeginning ),alignment: .bottom)
             Button( action: {
                 self.passwordHidden.toggle()
             }) {
@@ -102,12 +113,8 @@ struct FormWithValidator : View {
             }
             
         }
-        .padding( EdgeInsets(top:5, leading: 0, bottom: 25, trailing: 0) )
-        .overlay( ValidatorMessageInline( message: passwordValid.errorMessage )
-            ,alignment: .bottom)
         
         
- 
     }
     
     func password() -> some View {
@@ -124,8 +131,8 @@ struct FormWithValidator : View {
                              
                              return nil
                      }
-                    .padding( EdgeInsets(top:5, leading: 0, bottom: 25, trailing: 0) )
-                    .overlay( ValidatorMessageInline( message: passwordValid.errorMessage )
+                    .padding( passwordValid.padding )
+                    .overlay( ValidatorMessageInline( message: passwordValid.errorMessageOrNilAtBeginning )
                         ,alignment: .bottom)
 
         
