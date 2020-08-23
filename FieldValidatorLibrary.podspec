@@ -82,7 +82,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/bsorrentino/swiftui-fieldvalidator.git", :tag => "v1.2.0" }
+  spec.source       = { :git => "https://github.com/bsorrentino/swiftui-fieldvalidator.git", :tag => "v1.2.1" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
