@@ -5,7 +5,7 @@
 
 [SwiftUI](https://developer.apple.com/documentation/swiftui) [Package](https://swift.org/package-manager/) supporting "Form Validation"
 
-Take a look to [Build field validator for SwiftUI](https://soulsoftware-bsc.blogspot.com/2019/10/build-field-validator-for-swiftui.html) and in folder [Example] for a reference implementation
+Take a look to [Build field validator for SwiftUI](https://soulsoftware-bsc.blogspot.com/2019/10/build-field-validator-for-swiftui.html) and in folder [Example](Example) for a reference implementation
 
 ## Import library
 
