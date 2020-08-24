@@ -21,3 +21,7 @@ In your **Podfile** add
 ```
 pod 'FieldValidatorLibrary', '~> 1.2.1'
 ```
+
+## Sample
+
+[![Watch the video](FieldValidatorLibraryPreview.png)](https://youtu.be/_vMnTMtwtzw)
