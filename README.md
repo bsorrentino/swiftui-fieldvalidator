@@ -24,4 +24,4 @@ pod 'FieldValidatorLibrary', '~> 1.2.1'
 
 ## Sample
 
-[![Watch the video](FieldValidatorLibraryPreview.png)](https://youtu.be/_vMnTMtwtzw)
+![Sample](assets/FieldValidatorLibrarySample.gif)
