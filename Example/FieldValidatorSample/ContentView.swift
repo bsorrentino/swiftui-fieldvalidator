@@ -18,31 +18,6 @@ class DataItem: ObservableObject { // observable object
  
 }
 
-enum PasswordType: Int, Hashable {
-    
-    case classic
-    case toggle
-
-    var text:String {
-        switch( self ) {
-            case .classic: return "classic"
-            case .toggle: return "toggle"
-        }
-    }
-
-}
-
-
-extension FieldChecker {
-    var padding:EdgeInsets {
-        ( !self.valid && !self.isFirstCheck ) ? .init(top:5, leading: 0, bottom: 25, trailing: 0) : .init()
-    }
-    
-    var errorMessageOrNilAtBeginning:String?  {
-        self.isFirstCheck ? nil : errorMessage
-    }
-}
-
 struct FormWithValidator : View {
 
     @EnvironmentObject var item:DataItem // data model reference
@@ -52,30 +27,22 @@ struct FormWithValidator : View {
     
     @State var passwordToggleValid = FieldChecker() // validation state of password field
     @State var passwordHidden = true
-    @State var passwordType:PasswordType = .classic
-    
-   func passwordTypePicker() -> some View {
-       
-       Picker( selection: $passwordType, label: EmptyView() ) {
-           Text(PasswordType.classic.text).tag(PasswordType.classic)
-           Text(PasswordType.toggle.text).tag(PasswordType.toggle)
-       }
-       .pickerStyle(SegmentedPickerStyle())
-
-   }
-    
+        
     func username() -> some View {
 
-        TextFieldWithValidator( title: "username",
+        TextFieldWithValidator( title: "give me the email",
                                 value: $item.username,
                                 checker: $usernameValid,
                                 onCommit: submit) { v in
                          // validation closure where ‘v’ is the current value
                                                    
                             if( v.isEmpty ) {
-                                return "username cannot be empty"
+                                return "email cannot be empty"
                             }
-                            
+                            if( !v.isEmail() ) {
+                                return "email is not in correct format"
+                            }
+
                             return nil
                     }
                     .autocapitalization(.none)
@@ -117,30 +84,8 @@ struct FormWithValidator : View {
         
     }
     
-    func password() -> some View {
-        
-        SecureFieldWithValidator( title: "give me the password",
-                                value: $item.password,
-                                checker: $passwordValid,
-                                onCommit: submit) { v in
-                          // validation closure where ‘v’ is the current value
-                             
-                             if( v.isEmpty ) {
-                                 return "password cannot be empty"
-                             }
-                             
-                             return nil
-                     }
-                    .padding( passwordValid.padding )
-                    .overlay( ValidatorMessageInline( message: passwordValid.errorMessageOrNilAtBeginning )
-                        ,alignment: .bottom)
-
-        
-
-    }
-
     var isValid:Bool {
-        passwordValid.valid && usernameValid.valid
+        passwordToggleValid.valid && usernameValid.valid
     }
     
     func submit() {
@@ -154,32 +99,31 @@ struct FormWithValidator : View {
         NavigationView {
         Form {
             
-            Section {
+            Section(header: Text("Credentials")) {
                 
                 username()
                 
-                if( self.passwordType == .classic  ) {
-                    password()
-                }
-                else {
-                    passwordToggle()
-                }
+                passwordToggle()
                 
             } // end of section
             
             Section {
                 
-                Button( "Submit" ) {
-                    
-                    self.submit()
-                }
-                    // enable button only if username and password are valid
+                HStack {
+                    Spacer()
+                    Button( "Submit" ) {
+                        
+                        self.submit()
+                    }
+                    // enable button only if username and password are validb	
                     .disabled( !self.isValid )
+                    Spacer()
+
+                }
             } // end of section
             
         } // end of form
-           .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
-            .navigationBarItems(trailing: passwordTypePicker() )
+       .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
         } // NavigationView
     }
 }
