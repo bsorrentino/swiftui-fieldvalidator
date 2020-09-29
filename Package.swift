@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "FieldValidatorLibrary",
     platforms: [
-        //.macOS(.v10_10),
+        .macOS(.v10_15),
         //.tvOS(.v9),
         //.watchOS(.v2),
         .iOS(.v13)
