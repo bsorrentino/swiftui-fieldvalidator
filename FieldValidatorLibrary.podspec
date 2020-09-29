@@ -67,7 +67,6 @@ Pod::Spec.new do |spec|
   #
 
   # spec.platform     = :ios
-  spec.platform     = :ios
 
   #  When using multiple platforms
   spec.ios.deployment_target = "13.0"
