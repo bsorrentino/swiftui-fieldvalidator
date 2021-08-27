@@ -35,6 +35,7 @@ struct PasswordToggleField : View {
             }
         }
         .onAppear {
+            print("\(type(of: self)) onAppear")
             self.field.doValidate()
         }
 

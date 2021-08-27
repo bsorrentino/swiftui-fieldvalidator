@@ -18,7 +18,7 @@ public struct FieldChecker {
     internal var numberOfCheck = 0
     public var errorMessage:String?
     
-    public var isFirstCheck:Bool { numberOfCheck == 1 }
+    public var isFirstCheck:Bool { numberOfCheck == 0 }
 
     public var valid:Bool {
          self.errorMessage == nil
@@ -26,6 +26,7 @@ public struct FieldChecker {
     public init( errorMessage:String? = nil ) {
         self.errorMessage = errorMessage
     }
+    
 }
 
 @available(iOS 13, *)
@@ -38,7 +39,9 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
     @Published public var value:T
     {
         willSet {
-            self.doValidate(newValue)
+            if( newValue != value) {
+                self.doValidate(newValue)
+            }
         }
         didSet {
             self.bindValue = self.value
@@ -57,14 +60,18 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
         self._checker = checker
     }
     
-    public func doValidate( _ newValue:T? = nil ) -> Void {
+    fileprivate func doValidate( _ newValue:T ) -> Void {
         
-        self.checker.errorMessage =
-                        (newValue != nil) ?
-                            self.validator( newValue! ) :
-                            self.validator( self.value )
+        self.checker.errorMessage = self.validator( newValue )
         self.checker.numberOfCheck += 1
+//        print( "doValidate( newValue: '\(String(describing: newValue))' value: '\(self.value)' numberOfCheck: \(self.checker.numberOfCheck)")
     }
+    
+    public func doValidate() -> Void {
+        self.checker.errorMessage = self.validator( self.value )
+//        print( "doValidate( value: '\(self.value)' numberOfCheck: \(self.checker.numberOfCheck)")
+    }
+
 }
 
 
@@ -116,6 +123,7 @@ public struct TextFieldWithValidator : ViewWithFieldValidator {
         VStack {
             TextField( title ?? "", text: $field.value, onCommit: execIfValid(self.onCommit) )
                 .onAppear { // run validation on appear
+//                    print("\(type(of: self)) onAppear")
                     self.field.doValidate()
                 }
         }
@@ -148,9 +156,11 @@ public struct SecureFieldWithValidator : ViewWithFieldValidator {
     }
 
     public var body: some View {
+       
         VStack {
             SecureField( title ?? "", text: $field.value, onCommit: execIfValid(self.onCommit) )
                 .onAppear { // run validation on appear
+//                    print("\(type(of: self)) onAppear")
                     self.field.doValidate()
                 }
         }
