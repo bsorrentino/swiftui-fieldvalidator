@@ -40,7 +40,7 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
     {
         willSet {
             if( newValue != value) {
-                self.doValidate(newValue)
+                self.doValidate(value: newValue)
             }
         }
         didSet {
@@ -60,16 +60,17 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
         self._checker = checker
     }
     
-    fileprivate func doValidate( _ newValue:T ) -> Void {
-        
-        self.checker.errorMessage = self.validator( newValue )
-        self.checker.numberOfCheck += 1
-//        print( "doValidate( newValue: '\(String(describing: newValue))' value: '\(self.value)' numberOfCheck: \(self.checker.numberOfCheck)")
+    fileprivate func doValidate( value newValue:T ) -> Void {
+        DispatchQueue.main.async {
+            self.checker.errorMessage = self.validator( newValue )
+            self.checker.numberOfCheck += 1
+        }
     }
     
     public func doValidate() -> Void {
-        self.checker.errorMessage = self.validator( self.value )
-//        print( "doValidate( value: '\(self.value)' numberOfCheck: \(self.checker.numberOfCheck)")
+        DispatchQueue.main.async {
+            self.checker.errorMessage = self.validator( self.value )
+        }
     }
 
 }
