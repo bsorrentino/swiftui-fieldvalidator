@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F14E0892357A96D00586E5F /* FieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F14E0882357A96C00586E5F /* FieldValidator.swift */; };
 		5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486A723568D17007FA51F /* AppDelegate.swift */; };
 		5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486A923568D17007FA51F /* SceneDelegate.swift */; };
 		5F4486AC23568D17007FA51F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486AB23568D17007FA51F /* ContentView.swift */; };
@@ -17,10 +16,12 @@
 		A017662124F3BB5A00E04DE3 /* String+Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = A017662024F3BB5A00E04DE3 /* String+Email.swift */; };
 		A047652023DDF687005B8547 /* PasswordToggleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A047651F23DDF687005B8547 /* PasswordToggleField.swift */; };
 		A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */; };
+		A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */; };
+		A059CE7126DB925E007002F2 /* FormWithValidator1.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE7026DB925E007002F2 /* FormWithValidator1.swift */; };
+		A059CE7326DB9272007002F2 /* FormWithValidatorV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE7226DB9272007002F2 /* FormWithValidatorV2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5F14E0882357A96C00586E5F /* FieldValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FieldValidator.swift; path = ../Sources/FieldValidatorLibrary/FieldValidator.swift; sourceTree = "<group>"; };
 		5F4486A423568D17007FA51F /* FieldValidatorSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldValidatorSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F4486A723568D17007FA51F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F4486A923568D17007FA51F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +33,9 @@
 		A017662024F3BB5A00E04DE3 /* String+Email.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Email.swift"; sourceTree = "<group>"; };
 		A047651F23DDF687005B8547 /* PasswordToggleField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordToggleField.swift; sourceTree = "<group>"; };
 		A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FieldValidator+Helpers.swift"; sourceTree = "<group>"; };
+		A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldValidator.swift; path = ../Sources/FieldValidatorLibrary/FieldValidator.swift; sourceTree = "<group>"; };
+		A059CE7026DB925E007002F2 /* FormWithValidator1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithValidator1.swift; sourceTree = "<group>"; };
+		A059CE7226DB9272007002F2 /* FormWithValidatorV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithValidatorV2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +52,7 @@
 		5F44869B23568D17007FA51F = {
 			isa = PBXGroup;
 			children = (
-				5F14E0882357A96C00586E5F /* FieldValidator.swift */,
+				A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */,
 				5F4486A623568D17007FA51F /* FieldValidatorSample */,
 				5F4486A523568D17007FA51F /* Products */,
 			);
@@ -75,6 +79,8 @@
 				5F4486B223568D18007FA51F /* LaunchScreen.storyboard */,
 				5F4486B523568D18007FA51F /* Info.plist */,
 				5F4486AF23568D18007FA51F /* Preview Content */,
+				A059CE7026DB925E007002F2 /* FormWithValidator1.swift */,
+				A059CE7226DB9272007002F2 /* FormWithValidatorV2.swift */,
 			);
 			path = FieldValidatorSample;
 			sourceTree = "<group>";
@@ -114,7 +120,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1110;
-				LastUpgradeCheck = 1110;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = bsorrentino;
 				TargetAttributes = {
 					5F4486A323568D17007FA51F = {
@@ -158,10 +164,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F14E0892357A96D00586E5F /* FieldValidator.swift in Sources */,
+				A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */,
 				5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */,
+				A059CE7126DB925E007002F2 /* FormWithValidator1.swift in Sources */,
 				A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */,
 				A017662124F3BB5A00E04DE3 /* String+Email.swift in Sources */,
+				A059CE7326DB9272007002F2 /* FormWithValidatorV2.swift in Sources */,
 				A047652023DDF687005B8547 /* PasswordToggleField.swift in Sources */,
 				5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */,
 				5F4486AC23568D17007FA51F /* ContentView.swift in Sources */,
@@ -208,6 +216,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -232,7 +241,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -268,6 +277,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -286,7 +296,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
