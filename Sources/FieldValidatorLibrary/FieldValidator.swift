@@ -14,17 +14,14 @@ import Combine
 // MARK:  FIELD VALIDATION VERSION 2 
 //
 
-@available(iOS 13, *)
-public class FieldValidator2<T> : ObservableObject where T : Hashable {
+public class FieldValidatorX<T> : ObservableObject where T : Hashable {
     public typealias Validator = (T) -> String?
 
-    @Published public var value:T
     @Published public var errorMessage:String?
     
-    
+    public var debounceInMills:Int
     public var validator:Validator
     internal var numberOfCheck = 0
-    internal var validateSub:AnyCancellable?
     internal var bindSub:AnyCancellable?
 
     public var isFirstCheck:Bool { numberOfCheck == 1 }
@@ -33,14 +30,35 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
          self.errorMessage == nil
      }
 
-    public func bind( to value:Binding<T> ) {
+    public init( debounceInMills:Int, validator:@escaping Validator  ) {
+        self.debounceInMills = debounceInMills
+        self.validator = validator
+    }
+
+    public convenience init( debounceInMills:Int  ) {
+        self.init( debounceInMills:debounceInMills, validator:{ (v:T) -> String? in nil } )
+    }
+
+    public convenience init( validator:@escaping Validator  ) {
+        self.init( debounceInMills:0, validator:validator )
+    }
+    public convenience init() {
+        self.init( debounceInMills:0, validator:{ (v:T) -> String? in nil } )
+    }
+
+    public func bind( to publisher:Published<T>.Publisher ) {
         if let bindSub = self.bindSub {
             bindSub.cancel()
         }
-        self.bindSub = self.$value.sink { value.wrappedValue = $0 }
+        self.bindSub = publisher
+            .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
+            //.receive(on: RunLoop.main)
+            .sink { [self] v in
+                doValidate(value: v)
+            }
     }
 
-    public func unbind( from value:Binding<T> ) {
+    public func unbind() {
         if let bindSub = self.bindSub {
             bindSub.cancel()
         }
@@ -48,9 +66,36 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
 
     }
     
-    public init( _ value:T, debounceInMills:Int, validator:@escaping Validator  ) {
-        self.value = value
-        self.validator = validator
+    fileprivate func doValidate( value newValue:T ) -> Void {
+        self.errorMessage = self.validator( newValue )
+        self.numberOfCheck += 1
+    }
+    
+
+}
+
+@available(iOS 13, *)
+public class FieldValidator2<T> : ObservableObject where T : Hashable {
+    public typealias Validator = (T) -> String?
+
+    @Published public var value:T
+    @Published public var errorMessage:String?
+    
+    public var validator:Validator
+    internal var debounceInMills:Int
+    internal var numberOfCheck = 0
+    internal var validateSub:AnyCancellable?
+
+    public var isFirstCheck:Bool { numberOfCheck == 1 }
+
+    public var valid:Bool {
+         self.errorMessage == nil
+     }
+
+    public func bind( to bindValue:Binding<T> ) {
+        if let validateSub = self.validateSub {
+            validateSub.cancel()
+        }
         
         validateSub = self.$value
             .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
@@ -58,7 +103,32 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
             .sink { [self] v in
                 //print( "value updated \(v)" )
                 doValidate(value: v)
+                bindValue.wrappedValue = v
+                
             }
+    }
+
+    public func unbind() {
+        if let validateSub = self.validateSub {
+            validateSub.cancel()
+        }
+        
+        self.validateSub = self.$value
+            .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
+            //.receive(on: RunLoop.main)
+            .sink { [self] v in
+                //print( "value updated \(v)" )
+                doValidate(value: v)
+            }
+
+    }
+    
+    public init( _ value:T, debounceInMills:Int, validator:@escaping Validator  ) {
+        self.value = value
+        self.validator = validator
+        self.debounceInMills = debounceInMills
+        
+        self.unbind()
     }
 
     public convenience init( _ value:T, validator:@escaping Validator  ) {
@@ -79,6 +149,14 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
         DispatchQueue.main.async {
             self.errorMessage = self.validator( self.value )
         }
+    }
+    
+}
+
+extension FieldValidatorX {
+    
+    var errorMessageOrNilAtBeginning:String?  {
+        self.isFirstCheck ? nil : errorMessage
     }
 }
 

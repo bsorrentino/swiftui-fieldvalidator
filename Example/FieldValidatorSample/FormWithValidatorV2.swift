@@ -49,35 +49,29 @@ func passwordValididator( _ v:String ) -> String? {
 struct FormWithValidatorV2 : View {
     @EnvironmentObject var item:DataItem// data model reference
     
-    @StateObject var username = FieldValidator2( "", debounceInMills: 700, validator: usernameValididator )
-    @StateObject var password = FieldValidator2( "", validator: passwordValididator)
+    @StateObject var username = FieldValidatorX<String>( debounceInMills: 700, validator: usernameValididator )
+    @StateObject var password = FieldValidatorX<String>( validator: passwordValididator)
     @State var passwordHidden = true
       
     
     func usernameView() -> some View {
 
         TextField( "give me the email",
-                   text: $username.value,
+                   text: $item.username,
                    onCommit: submit)
             .autocapitalization(.none)
             .padding( .bottom, 25 )
             .overlay( ValidatorMessageInline( message: username.errorMessageOrNilAtBeginning ), alignment: .bottom)
-            .onAppear {
-                username.doValidate()
-            }
 
     }
     
     func passwordToggleView() -> some View  {
         
         HStack {
-            PasswordToggleFieldV2( value:$password.value, hidden:passwordHidden )
+            PasswordToggleFieldV2( value:$item.password, hidden:passwordHidden )
             .autocapitalization(.none)
             .padding( .bottom, 25  )
             .overlay( ValidatorMessageInline( message: password.errorMessage/*OrNilAtBeginning*/ ),alignment: .bottom)
-            .onAppear {
-                password.doValidate()
-            }
 
             Button( action: { self.passwordHidden.toggle() }) {
                 Group {
@@ -102,7 +96,6 @@ struct FormWithValidatorV2 : View {
     
     func submit() {
         if( isValid ) {
-            print( "submit:\nusername:\(self.username.value)\npassword:\(self.password.value)")
             print( "\nusername:\(item.username)\npassword:\(item.password)")
         }
     }
@@ -138,8 +131,8 @@ struct FormWithValidatorV2 : View {
         } // end of form
        .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
         .onAppear {
-            username.bind(to: $item.username )
-            password.bind(to: $item.password )
+            username.bind(to: item.$username )
+            password.bind(to: item.$password )
         }
         } // NavigationView
     }
