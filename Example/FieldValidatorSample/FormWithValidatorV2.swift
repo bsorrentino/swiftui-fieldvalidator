@@ -52,7 +52,8 @@ struct FormWithValidatorV2 : View {
     @StateObject var username = FieldValidator2( "", debounceInMills: 700, validator: usernameValididator )
     @StateObject var password = FieldValidator2( "", validator: passwordValididator)
     @State var passwordHidden = true
-        
+      
+    
     func usernameView() -> some View {
 
         TextField( "give me the email",
@@ -63,9 +64,6 @@ struct FormWithValidatorV2 : View {
             .overlay( ValidatorMessageInline( message: username.errorMessageOrNilAtBeginning ), alignment: .bottom)
             .onAppear {
                 username.doValidate()
-            }
-            .onChange(of: username.value) {
-                item.username = $0
             }
 
     }
@@ -79,9 +77,6 @@ struct FormWithValidatorV2 : View {
             .overlay( ValidatorMessageInline( message: password.errorMessage/*OrNilAtBeginning*/ ),alignment: .bottom)
             .onAppear {
                 password.doValidate()
-            }
-            .onChange(of: password.value) {
-                item.password = $0
             }
 
             Button( action: { self.passwordHidden.toggle() }) {
@@ -108,6 +103,7 @@ struct FormWithValidatorV2 : View {
     func submit() {
         if( isValid ) {
             print( "submit:\nusername:\(self.username.value)\npassword:\(self.password.value)")
+            print( "\nusername:\(item.username)\npassword:\(item.password)")
         }
     }
     
@@ -141,6 +137,10 @@ struct FormWithValidatorV2 : View {
             
         } // end of form
        .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
+        .onAppear {
+            username.bind(to: $item.username )
+            password.bind(to: $item.password )
+        }
         } // NavigationView
     }
 }

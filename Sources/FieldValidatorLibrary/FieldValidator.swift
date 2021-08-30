@@ -21,9 +21,11 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
     @Published public var value:T
     @Published public var errorMessage:String?
     
+    
     public var validator:Validator
     internal var numberOfCheck = 0
-    internal var subscription:AnyCancellable?
+    internal var validateSub:AnyCancellable?
+    internal var bindSub:AnyCancellable?
 
     public var isFirstCheck:Bool { numberOfCheck == 1 }
 
@@ -31,15 +33,30 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
          self.errorMessage == nil
      }
 
+    public func bind( to value:Binding<T> ) {
+        if let bindSub = self.bindSub {
+            bindSub.cancel()
+        }
+        self.bindSub = self.$value.sink { value.wrappedValue = $0 }
+    }
+
+    public func unbind( from value:Binding<T> ) {
+        if let bindSub = self.bindSub {
+            bindSub.cancel()
+        }
+        self.bindSub = nil
+
+    }
+    
     public init( _ value:T, debounceInMills:Int, validator:@escaping Validator  ) {
         self.value = value
         self.validator = validator
         
-        subscription = self.$value
+        validateSub = self.$value
             .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
             //.receive(on: RunLoop.main)
             .sink { [self] v in
-                print( "value updated \(v)" )
+                //print( "value updated \(v)" )
                 doValidate(value: v)
             }
     }
