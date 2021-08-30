@@ -9,14 +9,6 @@
 import SwiftUI
 import Combine
 
-
-extension FieldChecker {
-    var padding:EdgeInsets {
-        ( !self.valid && !self.isFirstCheck ) ? .init(top:5, leading: 0, bottom: 25, trailing: 0) : .init()
-    }
-}
-
-
 struct FormWithValidatorV1 : View {
 
     @EnvironmentObject var item:DataItem // data model reference
@@ -46,7 +38,7 @@ struct FormWithValidatorV1 : View {
                     }
                     .autocapitalization(.none)
                     .padding( .bottom, 25 )
-                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessage/*OrNilAtBeginning*/ )
+                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning )
                                 ,alignment: .bottom)
 
     }
@@ -64,7 +56,7 @@ struct FormWithValidatorV1 : View {
             }
             .autocapitalization(.none)
             .padding( .bottom, 25  )
-            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessageOrNilAtBeginning ),alignment: .bottom)
+            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessage ),alignment: .bottom)
             Button( action: {
                 self.passwordHidden.toggle()
             }) {
