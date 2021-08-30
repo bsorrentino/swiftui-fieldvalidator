@@ -19,104 +19,10 @@ This Library is compatible with [Cocoapods](https://cocoapods.org).
 
 In your **Podfile** add
 ```
-pod 'FieldValidatorLibrary', '~> 2.0.0'
+pod 'FieldValidatorLibrary', '~> 1.4.1'
 ```
 
 ## Sample
-
-### Version 2
-
-```swift
-
-// validation closure where ‘v’ is the current value
-func usernameValididator( _ v:String ) -> String? {
-     if( v.isEmpty ) {
-         return "email cannot be empty"
-     }
-     if( !v.isEmail() ) {
-         return "email is not in correct format"
-     }
-
-     return nil
-}
-
-// validation closure where ‘v’ is the current value
-func passwordValididator( _ v:String ) -> String? {
-    if( v.isEmpty ) {
-        return "password cannot be empty"
-    }
-    return nil
-}
-
-struct FormWithValidatorV2 : View {
-    @EnvironmentObject var item:DataItem// data model reference
-
-    @StateObject var username = FieldValidator2( "", debounceInMills: 700, validator: usernameValididator )
-    @StateObject var password = FieldValidator2( "", validator: passwordValididator)
-
-    func usernameView() -> some View {
-        TextField( "give me the email",
-                   text: $username.value,
-                   onCommit: submit)
-        .autocapitalization(.none)
-        .padding( .bottom, 25 )
-        .overlay( ValidatorMessageInline( message: username.errorMessageOrNilAtBeginning ), alignment: .bottom)
-        .onAppear {
-            username.doValidate()
-        }
-        .onChange(of: username.value) {
-            item.username = $0
-        }
-    }
-
-    func passwordToggleView() -> some View  {
-        SecureField( "give me the password", text: $password.value )
-        .autocapitalization(.none)
-        .padding( .bottom, 25  )
-        .overlay( ValidatorMessageInline( message: password.errorMessage ),alignment: .bottom)
-        .onAppear {
-            password.doValidate()
-        }
-        .onChange(of: password.value) {
-            item.password = $0
-        }
-    }
-
-    var isValid:Bool {
-        password.valid && username.valid
-    }
-
-    func submit() {
-        if( isValid ) {
-            print( "submit:\nusername:\(self.username.value)\npassword:\(self.password.value)")
-        }
-    }
-
-    var body: some View {
-        NavigationView {
-        Form {
-            Section(header: Text("Credentials")) {
-                usernameView()
-                passwordToggleView()
-            } // end of section
-            Section {
-                HStack {
-                    Spacer()
-                    Button( "Submit" ) { self.submit() }
-                    // enable button only if username and password are valid
-                    .disabled( !self.isValid )
-                    Spacer()
-                }
-            } // end of section
-        } // end of form
-       .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
-        } // NavigationView
-    }
-}
-
-```
-
-### Version 1 (Deprecated)
 
 ```swift
 

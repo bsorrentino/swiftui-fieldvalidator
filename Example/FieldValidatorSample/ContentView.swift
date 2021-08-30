@@ -23,16 +23,10 @@ struct ContentView : View {
         
         NavigationView {
         TabView {
-            FormWithValidatorV2()
-                .environmentObject( DataItem() )
-                 .tabItem {
-                     Label("Form validator v2", systemImage: "list.dash")
-                 }
-
              FormWithValidatorV1()
                  .environmentObject( DataItem() )
                  .tabItem {
-                     Label("Form validator v1", systemImage: "square.and.pencil")
+                     Label("Form validator", systemImage: "square.and.pencil")
                  }
          }
        .navigationBarTitle( Text( "FieldValidator Samples" ), displayMode: .inline  )

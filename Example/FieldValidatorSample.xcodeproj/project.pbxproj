@@ -18,7 +18,6 @@
 		A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */; };
 		A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */; };
 		A059CE7126DB925E007002F2 /* FormWithValidatorV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE7026DB925E007002F2 /* FormWithValidatorV1.swift */; };
-		A059CE7326DB9272007002F2 /* FormWithValidatorV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE7226DB9272007002F2 /* FormWithValidatorV2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +34,6 @@
 		A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FieldValidator+Helpers.swift"; sourceTree = "<group>"; };
 		A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldValidator.swift; path = ../Sources/FieldValidatorLibrary/FieldValidator.swift; sourceTree = "<group>"; };
 		A059CE7026DB925E007002F2 /* FormWithValidatorV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithValidatorV1.swift; sourceTree = "<group>"; };
-		A059CE7226DB9272007002F2 /* FormWithValidatorV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithValidatorV2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +78,6 @@
 				5F4486B523568D18007FA51F /* Info.plist */,
 				5F4486AF23568D18007FA51F /* Preview Content */,
 				A059CE7026DB925E007002F2 /* FormWithValidatorV1.swift */,
-				A059CE7226DB9272007002F2 /* FormWithValidatorV2.swift */,
 			);
 			path = FieldValidatorSample;
 			sourceTree = "<group>";
@@ -169,7 +166,6 @@
 				A059CE7126DB925E007002F2 /* FormWithValidatorV1.swift in Sources */,
 				A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */,
 				A017662124F3BB5A00E04DE3 /* String+Email.swift in Sources */,
-				A059CE7326DB9272007002F2 /* FormWithValidatorV2.swift in Sources */,
 				A047652023DDF687005B8547 /* PasswordToggleField.swift in Sources */,
 				5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */,
 				5F4486AC23568D17007FA51F /* ContentView.swift in Sources */,

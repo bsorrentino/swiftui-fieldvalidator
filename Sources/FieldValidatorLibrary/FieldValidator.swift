@@ -11,68 +11,9 @@ import Combine
 
 
 //
-// MARK:  FIELD VALIDATION VERSION 2 
-//
-
-@available(iOS 13, *)
-public class FieldValidator2<T> : ObservableObject where T : Hashable {
-    public typealias Validator = (T) -> String?
-
-    @Published public var value:T
-    @Published public var errorMessage:String?
-    
-    private let validator:Validator
-    internal var numberOfCheck = 0
-    internal var subscription:AnyCancellable?
-
-    public var isFirstCheck:Bool { numberOfCheck == 1 }
-
-    public var valid:Bool {
-         self.errorMessage == nil
-     }
-
-    public init( _ value:T, debounceInMills:Int, validator:@escaping Validator  ) {
-        self.value = value
-        self.validator = validator
-        
-        subscription = self.$value
-            .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
-            //.receive(on: RunLoop.main)
-            .sink { [self] v in
-                print( "value updated \(v)" )
-                doValidate(value: v)
-            }
-    }
-
-    public convenience init( _ value:T, validator:@escaping Validator  ) {
-        self.init( value, debounceInMills:0, validator:validator )
-    }
-    
-
-    fileprivate func doValidate( value newValue:T ) -> Void {
-        self.errorMessage = self.validator( newValue )
-        self.numberOfCheck += 1
-    }
-    
-    public func doValidate() -> Void {
-        DispatchQueue.main.async {
-            self.errorMessage = self.validator( self.value )
-        }
-    }
-}
-
-extension FieldValidator2 {
-    
-    var errorMessageOrNilAtBeginning:String?  {
-        self.isFirstCheck ? nil : errorMessage
-    }
-}
-
-//
 // MARK:  FIELD VALIDATION VERSION 1 - (DEPRECATED)
 //
 
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public struct FieldChecker {
     
@@ -97,7 +38,6 @@ extension FieldChecker {
     }
 }
 
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public class FieldValidator<T> : ObservableObject where T : Hashable {
     public typealias Validator = (T) -> String?
@@ -165,7 +105,6 @@ extension ViewWithFieldValidator {
 
 }
 
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public struct TextFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )
@@ -202,7 +141,6 @@ public struct TextFieldWithValidator : ViewWithFieldValidator {
     
 }
 
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public struct SecureFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )
