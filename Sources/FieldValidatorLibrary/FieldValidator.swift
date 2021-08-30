@@ -21,7 +21,7 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
     @Published public var value:T
     @Published public var errorMessage:String?
     
-    public var validator:Validator?
+    public var validator:Validator
     internal var numberOfCheck = 0
     internal var subscription:AnyCancellable?
 
@@ -47,19 +47,20 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
     public convenience init( _ value:T, validator:@escaping Validator  ) {
         self.init( value, debounceInMills:0, validator:validator )
     }
-    
+
+    public convenience init( _ value:T, debounceInMills debounce:Int = 0  ) {
+        self.init( value, debounceInMills:debounce, validator: { (v:T) -> String? in nil }  )
+    }
+
 
     fileprivate func doValidate( value newValue:T ) -> Void {
-        guard let validator = self.validator else  { return }
-        
-        self.errorMessage = validator( newValue )
+        self.errorMessage = self.validator( newValue )
         self.numberOfCheck += 1
     }
     
     public func doValidate() -> Void {
-        guard let validator = self.validator else  { return }
         DispatchQueue.main.async {
-            self.errorMessage = validator( self.value )
+            self.errorMessage = self.validator( self.value )
         }
     }
 }
