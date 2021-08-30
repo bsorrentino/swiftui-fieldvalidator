@@ -21,7 +21,7 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
     @Published public var value:T
     @Published public var errorMessage:String?
     
-    private let validator:Validator
+    var validator:Validator?
     internal var numberOfCheck = 0
     internal var subscription:AnyCancellable?
 
@@ -50,13 +50,16 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
     
 
     fileprivate func doValidate( value newValue:T ) -> Void {
-        self.errorMessage = self.validator( newValue )
+        guard let validator = self.validator else  { return }
+        
+        self.errorMessage = validator( newValue )
         self.numberOfCheck += 1
     }
     
     public func doValidate() -> Void {
+        guard let validator = self.validator else  { return }
         DispatchQueue.main.async {
-            self.errorMessage = self.validator( self.value )
+            self.errorMessage = validator( self.value )
         }
     }
 }
