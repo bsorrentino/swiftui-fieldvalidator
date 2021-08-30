@@ -24,4 +24,219 @@ pod 'FieldValidatorLibrary', '~> 1.4.0'
 
 ## Sample
 
+### Version 2 
+
+```swift
+
+func usernameValididator( _ v:String ) -> String? {
+    // validation closure where ‘v’ is the current value
+                              
+       if( v.isEmpty ) {
+           return "email cannot be empty"
+       }
+       if( !v.isEmail() ) {
+           return "email is not in correct format"
+       }
+
+       return nil
+}
+
+func passwordValididator( _ v:String ) -> String? {
+    // validation closure where ‘v’ is the current value
+                              
+    if( v.isEmpty ) {
+        return "password cannot be empty"
+    }
+    return nil
+}
+
+struct FormWithValidatorV2 : View {
+    @EnvironmentObject var item:DataItem// data model reference
+    
+    @StateObject var username = FieldValidator2( "", debounceInMills: 700, validator: usernameValididator )
+    @StateObject var password = FieldValidator2( "", validator: passwordValididator)
+    @State var passwordHidden = true
+        
+    func usernameView() -> some View {
+
+        TextField( "give me the email",
+                   text: $username.value,
+                   onCommit: submit)
+        .autocapitalization(.none)
+        .padding( .bottom, 25 )
+        .overlay( ValidatorMessageInline( message: username.errorMessageOrNilAtBeginning ), alignment: .bottom)
+        .onAppear {
+            username.doValidate()
+        }
+        .onChange(of: username.value) {
+            item.username = $0
+        }
+
+    }
+    
+    func passwordToggleView() -> some View  {
+        
+        SecureField( "give me the password", text: $password.value )
+        .autocapitalization(.none)
+        .padding( .bottom, 25  )
+        .overlay( ValidatorMessageInline( message: password.errorMessage ),alignment: .bottom)
+        .onAppear {
+            password.doValidate()
+        }
+        .onChange(of: password.value) {
+            item.password = $0
+        }
+                
+    }
+    
+    var isValid:Bool {
+        password.valid && username.valid
+    }
+    
+    func submit() {
+        if( isValid ) {
+            print( "submit:\nusername:\(self.username.value)\npassword:\(self.password.value)")
+        }
+    }
+    
+    var body: some View {
+        
+        NavigationView {
+        Form {
+            
+            Section(header: Text("Credentials")) {
+                
+                usernameView()
+                
+                passwordToggleView()
+                
+            } // end of section
+            
+            Section {
+                
+                HStack {
+                    Spacer()
+                    Button( "Submit" ) {
+                        
+                        self.submit()
+                    }
+                    // enable button only if username and password are validb
+                    .disabled( !self.isValid )
+                    Spacer()
+
+                }
+            } // end of section
+            
+        } // end of form
+       .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
+        } // NavigationView
+    }
+}
+
+```
+
+### Version 1 (Deprecated)
+
+```swift
+
+struct FormWithValidatorV1 : View {
+
+    @EnvironmentObject var item:DataItem // data model reference
+
+    @State var usernameValid = FieldChecker() // validation state of username field
+    @State var passwordValid = FieldChecker() // validation state of password field
+    
+    @State var passwordToggleValid = FieldChecker() // validation state of password field
+        
+    func username() -> some View {
+
+        TextFieldWithValidator( title: "give me the email",
+                                value: $item.username,
+                                checker: $usernameValid,
+                                onCommit: submit) { v in
+                         // validation closure where ‘v’ is the current value
+                                                   
+                            if( v.isEmpty ) {
+                                return "email cannot be empty"
+                            }
+                            if( !v.isEmail() ) {
+                                return "email is not in correct format"
+                            }
+
+                            return nil
+                    }
+                    .autocapitalization(.none)
+                    .padding( .bottom, 25 )
+                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning )
+                                ,alignment: .bottom)
+
+    }
+    
+    func passwordToggle() -> some View  {
+        
+        HStack {
+            SecureFieldWithValidator(   title: "give me the password"
+                                        value:$item.password,
+                                        checker:$passwordToggleValid ) { v in
+                                        
+                                    if( v.isEmpty ) {
+                                        return "password cannot be empty"
+                                    }
+                                    return nil
+            }
+            .autocapitalization(.none)
+            .padding( .bottom, 25  )
+            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessage ),alignment: .bottom)
+            
+        }
+        
+        
+    }
+    
+    var isValid:Bool {
+        passwordToggleValid.valid && usernameValid.valid
+    }
+    
+    func submit() {
+        if( isValid ) {
+            print( "submit:\nusername:\(self.item.username)\npassword:\(self.item.password)")
+        }
+    }
+    
+    var body: some View {
+        
+        NavigationView {
+        Form {
+            
+            Section(header: Text("Credentials")) {
+                
+                username()
+                
+                passwordToggle()
+                
+            } // end of section
+            
+            Section {
+                
+                HStack {
+                    Spacer()
+                    Button( "Submit" ) {
+                        
+                        self.submit()
+                    }
+                    // enable button only if username and password are validb
+                    .disabled( !self.isValid )
+                    Spacer()
+
+                }
+            } // end of section
+            
+        } // end of form
+       .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
+        } // NavigationView
+    }
+}
+
+```
+
 ![Sample](assets/FieldValidatorLibrarySample.gif)
