@@ -19,7 +19,7 @@ This Library is compatible with [Cocoapods](https://cocoapods.org).
 
 In your **Podfile** add
 ```
-pod 'FieldValidatorLibrary', '~> 1.4.0'
+pod 'FieldValidatorLibrary', '~> 2.0.0'
 ```
 
 ## Sample
