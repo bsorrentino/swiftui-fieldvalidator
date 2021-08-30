@@ -21,7 +21,7 @@ public class FieldValidator2<T> : ObservableObject where T : Hashable {
     @Published public var value:T
     @Published public var errorMessage:String?
     
-    var validator:Validator?
+    public var validator:Validator?
     internal var numberOfCheck = 0
     internal var subscription:AnyCancellable?
 
