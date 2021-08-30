@@ -38,7 +38,7 @@ struct FormWithValidatorV1 : View {
                     }
                     .autocapitalization(.none)
                     .padding( .bottom, 25 )
-                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessage/*OrNilAtBeginning*/ )
+                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning )
                                 ,alignment: .bottom)
 
     }
@@ -56,7 +56,7 @@ struct FormWithValidatorV1 : View {
             }
             .autocapitalization(.none)
             .padding( .bottom, 25  )
-            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessageOrNilAtBeginning ),alignment: .bottom)
+            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessage ),alignment: .bottom)
             Button( action: {
                 self.passwordHidden.toggle()
             }) {
