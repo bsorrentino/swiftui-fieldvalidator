@@ -9,14 +9,6 @@
 import SwiftUI
 import Combine
 
-
-extension FieldChecker {
-    var padding:EdgeInsets {
-        ( !self.valid && !self.isFirstCheck ) ? .init(top:5, leading: 0, bottom: 25, trailing: 0) : .init()
-    }
-}
-
-
 struct FormWithValidatorV1 : View {
 
     @EnvironmentObject var item:DataItem // data model reference
