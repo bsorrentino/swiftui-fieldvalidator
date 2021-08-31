@@ -11,167 +11,69 @@ import Combine
 
 
 //
-// MARK:  FIELD VALIDATION VERSION 2 
+// MARK:  FIELD VALIDATION
 //
-
-public class FieldValidatorX<T> : ObservableObject where T : Hashable {
-    public typealias Validator = (T) -> String?
-
-    @Published public var errorMessage:String?
-    
-    public var debounceInMills:Int
-    public var validator:Validator
-    internal var numberOfCheck = 0
-    internal var bindSub:AnyCancellable?
-
-    public var isFirstCheck:Bool { numberOfCheck == 1 }
-
-    public var valid:Bool {
-         self.errorMessage == nil
-     }
-
-    public init( debounceInMills:Int, validator:@escaping Validator  ) {
-        self.debounceInMills = debounceInMills
-        self.validator = validator
-    }
-
-    public convenience init( debounceInMills:Int  ) {
-        self.init( debounceInMills:debounceInMills, validator:{ (v:T) -> String? in nil } )
-    }
-
-    public convenience init( validator:@escaping Validator  ) {
-        self.init( debounceInMills:0, validator:validator )
-    }
-    public convenience init() {
-        self.init( debounceInMills:0, validator:{ (v:T) -> String? in nil } )
-    }
-
-    public func bind( to publisher:Published<T>.Publisher ) {
-        if let bindSub = self.bindSub {
-            bindSub.cancel()
-        }
-        self.bindSub = publisher
-            .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
-            //.receive(on: RunLoop.main)
-            .sink { [self] v in
-                doValidate(value: v)
-            }
-    }
-
-    public func unbind() {
-        if let bindSub = self.bindSub {
-            bindSub.cancel()
-        }
-        self.bindSub = nil
-
-    }
-    
-    fileprivate func doValidate( value newValue:T ) -> Void {
-        self.errorMessage = self.validator( newValue )
-        self.numberOfCheck += 1
-    }
-    
-
-}
-
 @available(iOS 13, *)
-public class FieldValidator2<T> : ObservableObject where T : Hashable {
-    public typealias Validator = (T) -> String?
-
-    @Published public var value:T
-    @Published public var errorMessage:String?
+public class FieldChecker2<T : Hashable> : ObservableObject {
     
-    public var validator:Validator
-    internal var debounceInMills:Int
     internal var numberOfCheck = 0
-    internal var validateSub:AnyCancellable?
+    @Published fileprivate(set) var errorMessage:String?
 
-    public var isFirstCheck:Bool { numberOfCheck == 1 }
+    internal var boundSub:AnyCancellable?
+    fileprivate var subject = PassthroughSubject<T,Never>()
+    
+    public var isFirstCheck:Bool { numberOfCheck == 0 }
 
     public var valid:Bool {
          self.errorMessage == nil
-     }
-
-    public func bind( to bindValue:Binding<T> ) {
-        if let validateSub = self.validateSub {
-            validateSub.cancel()
-        }
-        
-        validateSub = self.$value
-            .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
-            //.receive(on: RunLoop.main)
-            .sink { [self] v in
-                //print( "value updated \(v)" )
-                doValidate(value: v)
-                bindValue.wrappedValue = v
-                
-            }
-    }
-
-    public func unbind() {
-        if let validateSub = self.validateSub {
-            validateSub.cancel()
-        }
-        
-        self.validateSub = self.$value
-            .debounce(for: .milliseconds(debounceInMills), scheduler: RunLoop.main)
-            //.receive(on: RunLoop.main)
-            .sink { [self] v in
-                //print( "value updated \(v)" )
-                doValidate(value: v)
-            }
-
     }
     
-    public init( _ value:T, debounceInMills:Int, validator:@escaping Validator  ) {
-        self.value = value
-        self.validator = validator
-        self.debounceInMills = debounceInMills
-        
-        self.unbind()
+    public init( errorMessage:String? = nil ) {
+        self.errorMessage = errorMessage
     }
-
-    public convenience init( _ value:T, validator:@escaping Validator  ) {
-        self.init( value, debounceInMills:0, validator:validator )
+    
+    fileprivate func bind( to value:T, andValidateWith validator:@escaping(T) -> String? ) {
+        if boundSub == nil  {
+//            print( "bind( to: )")
+            boundSub = subject.debounce(for: .milliseconds(700), scheduler: RunLoop.main)
+                        .sink {
+//                            print( "validate: \($0)" )
+                            self.errorMessage = validator( $0 )
+                            self.numberOfCheck += 1
+                            
+                        }
+            // First Validation
+            self.errorMessage = validator( value )
+        }
     }
-
-    public convenience init( _ value:T, debounceInMills debounce:Int = 0  ) {
-        self.init( value, debounceInMills:debounce, validator: { (v:T) -> String? in nil }  )
-    }
-
-
+    
     fileprivate func doValidate( value newValue:T ) -> Void {
-        self.errorMessage = self.validator( newValue )
-        self.numberOfCheck += 1
+        self.subject.send(newValue)
+        
     }
+
+}
+
+extension Binding where Value : Hashable {
     
-    public func doValidate() -> Void {
+    func onValidate( checker:FieldChecker2<Value>, debounceInMills:Int = 0, validator:@escaping (Value) -> String? ) -> Binding<Value> {
+        
         DispatchQueue.main.async {
-            self.errorMessage = self.validator( self.value )
+            checker.bind(to: self.wrappedValue, andValidateWith: validator)
         }
-    }
-    
-}
-
-extension FieldValidatorX {
-    
-    var errorMessageOrNilAtBeginning:String?  {
-        self.isFirstCheck ? nil : errorMessage
-    }
-}
-
-extension FieldValidator2 {
-    
-    var errorMessageOrNilAtBeginning:String?  {
-        self.isFirstCheck ? nil : errorMessage
+        return Binding(
+            get: { self.wrappedValue },
+            set: { newValue in
+                
+                if( newValue != self.wrappedValue) {
+                    checker.doValidate(value: newValue )
+                }
+                self.wrappedValue = newValue
+            }
+        )
     }
 }
 
-//
-// MARK:  FIELD VALIDATION VERSION 1 - (DEPRECATED)
-//
-
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public struct FieldChecker {
     
@@ -182,11 +84,12 @@ public struct FieldChecker {
 
     public var valid:Bool {
          self.errorMessage == nil
-     }
+    }
+    
     public init( errorMessage:String? = nil ) {
         self.errorMessage = errorMessage
     }
-    
+
 }
 
 extension FieldChecker {
@@ -196,7 +99,6 @@ extension FieldChecker {
     }
 }
 
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public class FieldValidator<T> : ObservableObject where T : Hashable {
     public typealias Validator = (T) -> String?
@@ -264,7 +166,6 @@ extension ViewWithFieldValidator {
 
 }
 
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public struct TextFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )
@@ -301,7 +202,6 @@ public struct TextFieldWithValidator : ViewWithFieldValidator {
     
 }
 
-@available(*, deprecated, message: "Use FieldValidator2 instead")
 @available(iOS 13, *)
 public struct SecureFieldWithValidator : ViewWithFieldValidator {
     // specialize validator for TestField ( T = String )

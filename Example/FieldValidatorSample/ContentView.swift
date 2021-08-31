@@ -11,7 +11,7 @@ import Combine
 
 class DataItem: ObservableObject { // observable object
  
-    @Published var username:String = "test" // observable property
+    @Published var username:String = "" // observable property
     @Published var password:String = "" // observable property
  
 }
