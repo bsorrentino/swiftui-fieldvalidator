@@ -33,7 +33,7 @@ struct ValidatorMessageModifier: ViewModifier {
 }
 
 
-struct FormWithValidatorV2 : View {
+struct FormWithValidatorV1_5 : View {
     
     struct PasswordToggleField : View {
         @Binding var value:String
@@ -142,19 +142,19 @@ struct FormWithValidatorV2 : View {
             } // end of section
             
         } // end of form
-       .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
+       .navigationBarTitle( Text( "Validation 1.5 Sample" ), displayMode: .inline  )
         } // NavigationView
     }
 }
 
 #if DEBUG
-struct FormVithValidatorV2_Previews: PreviewProvider {
+struct FormVithValidatorV1_5_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            FormWithValidatorV1()
+            FormWithValidatorV1_5()
                 .environment(\.colorScheme, .light)
                 .environmentObject( DataItem() )
-            FormWithValidatorV1()
+            FormWithValidatorV1_5()
                 .environment(\.colorScheme, .dark)
                 .environmentObject( DataItem() )
          }

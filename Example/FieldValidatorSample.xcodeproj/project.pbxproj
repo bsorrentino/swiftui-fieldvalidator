@@ -13,11 +13,12 @@
 		5F4486AE23568D18007FA51F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F4486AD23568D18007FA51F /* Assets.xcassets */; };
 		5F4486B123568D18007FA51F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F4486B023568D18007FA51F /* Preview Assets.xcassets */; };
 		5F4486B423568D18007FA51F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F4486B223568D18007FA51F /* LaunchScreen.storyboard */; };
+		5F82B3E226DE7C8A00D4BB7C /* FormWithValidatorV1_5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82B3E026DE7C8900D4BB7C /* FormWithValidatorV1_5.swift */; };
+		5F82B3E326DE7C8A00D4BB7C /* FormWithValidatorV1_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82B3E126DE7C8900D4BB7C /* FormWithValidatorV1_4.swift */; };
 		A017662124F3BB5A00E04DE3 /* String+Email.swift in Sources */ = {isa = PBXBuildFile; fileRef = A017662024F3BB5A00E04DE3 /* String+Email.swift */; };
 		A047652023DDF687005B8547 /* PasswordToggleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A047651F23DDF687005B8547 /* PasswordToggleField.swift */; };
 		A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */; };
 		A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */; };
-		A059CE7126DB925E007002F2 /* FormWithValidatorV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE7026DB925E007002F2 /* FormWithValidatorV1.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,11 +30,12 @@
 		5F4486B023568D18007FA51F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5F4486B323568D18007FA51F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F4486B523568D18007FA51F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5F82B3E026DE7C8900D4BB7C /* FormWithValidatorV1_5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormWithValidatorV1_5.swift; sourceTree = "<group>"; };
+		5F82B3E126DE7C8900D4BB7C /* FormWithValidatorV1_4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormWithValidatorV1_4.swift; sourceTree = "<group>"; };
 		A017662024F3BB5A00E04DE3 /* String+Email.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Email.swift"; sourceTree = "<group>"; };
 		A047651F23DDF687005B8547 /* PasswordToggleField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordToggleField.swift; sourceTree = "<group>"; };
 		A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FieldValidator+Helpers.swift"; sourceTree = "<group>"; };
 		A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldValidator.swift; path = ../Sources/FieldValidatorLibrary/FieldValidator.swift; sourceTree = "<group>"; };
-		A059CE7026DB925E007002F2 /* FormWithValidatorV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithValidatorV1.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,8 @@
 		5F4486A623568D17007FA51F /* FieldValidatorSample */ = {
 			isa = PBXGroup;
 			children = (
+				5F82B3E126DE7C8900D4BB7C /* FormWithValidatorV1_4.swift */,
+				5F82B3E026DE7C8900D4BB7C /* FormWithValidatorV1_5.swift */,
 				5F4486A723568D17007FA51F /* AppDelegate.swift */,
 				5F4486A923568D17007FA51F /* SceneDelegate.swift */,
 				5F4486AB23568D17007FA51F /* ContentView.swift */,
@@ -77,7 +81,6 @@
 				5F4486B223568D18007FA51F /* LaunchScreen.storyboard */,
 				5F4486B523568D18007FA51F /* Info.plist */,
 				5F4486AF23568D18007FA51F /* Preview Content */,
-				A059CE7026DB925E007002F2 /* FormWithValidatorV1.swift */,
 			);
 			path = FieldValidatorSample;
 			sourceTree = "<group>";
@@ -163,12 +166,13 @@
 			files = (
 				A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */,
 				5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */,
-				A059CE7126DB925E007002F2 /* FormWithValidatorV1.swift in Sources */,
+				5F82B3E326DE7C8A00D4BB7C /* FormWithValidatorV1_4.swift in Sources */,
 				A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */,
 				A017662124F3BB5A00E04DE3 /* String+Email.swift in Sources */,
 				A047652023DDF687005B8547 /* PasswordToggleField.swift in Sources */,
 				5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */,
 				5F4486AC23568D17007FA51F /* ContentView.swift in Sources */,
+				5F82B3E226DE7C8A00D4BB7C /* FormWithValidatorV1_5.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

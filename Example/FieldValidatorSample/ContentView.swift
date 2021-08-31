@@ -23,13 +23,17 @@ struct ContentView : View {
 
         NavigationView {
         TabView {
-             FormWithValidatorV1()
+             FormWithValidatorV1_5()
                  .tabItem {
-                     Label("Form validator", systemImage: "square.and.pencil")
+                     Label("Sample v1.5", systemImage: "square.and.pencil")
                  }
+            FormWithValidatorV1_4()
+                .tabItem {
+                    Label("Sample v1.4", systemImage: "square.and.pencil")
+                }
         }
         .environmentObject( DataItem() )
-        .navigationBarTitle( Text( "FieldValidator Samples" ), displayMode: .inline  )
+        .navigationBarTitle( Text( "FieldValidator Sample" ), displayMode: .inline  )
         } // NavigationView
     }
 }

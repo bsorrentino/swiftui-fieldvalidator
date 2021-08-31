@@ -9,7 +9,7 @@
 import SwiftUI
 import Combine
 
-struct FormWithValidatorV1 : View {
+struct FormWithValidatorV1_4 : View {
 
     @EnvironmentObject var item:DataItem // data model reference
 
@@ -115,19 +115,19 @@ struct FormWithValidatorV1 : View {
             } // end of section
             
         } // end of form
-       .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
+       .navigationBarTitle( Text( "Validation 1.4 Sample" ), displayMode: .inline  )
         } // NavigationView
     }
 }
 
 #if DEBUG
-struct FormVithValidatorV1_Previews: PreviewProvider {
+struct FormVithValidatorV1_4_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            FormWithValidatorV1()
+            FormWithValidatorV1_4()
                 .environment(\.colorScheme, .light)
                 .environmentObject( DataItem() )
-            FormWithValidatorV1()
+            FormWithValidatorV1_4()
                 .environment(\.colorScheme, .dark)
                 .environmentObject( DataItem() )
          }

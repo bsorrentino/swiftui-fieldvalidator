@@ -24,6 +24,131 @@ pod 'FieldValidatorLibrary', '~> 1.4.1'
 
 ## Sample
 
+### Version 1.5.x
+
+```swift
+struct ValidatorMessageModifier: ViewModifier {
+
+    var message:String?
+
+    var msg: some View {
+        HStack {
+            Text( message ?? "")
+            .fontWeight(.light)
+            .font(.footnote)
+            .foregroundColor(Color.red)
+
+            if message != nil  {
+                Image( systemName: "exclamationmark.triangle")
+                    .foregroundColor(Color.red)
+                    .font(.footnote)
+            }
+        }
+    }
+
+    func body(content: Content) -> some View {
+        return content.overlay( msg, alignment: .bottom )
+    }
+}
+
+struct PasswordToggleField : View {
+    @Binding var value:String
+    @Binding var hidden:Bool
+
+    var body: some View {
+        Group {
+            if( hidden ) {
+                SecureField( "give me the password", text:$value)
+            }
+            else {
+                TextField( "give me the password", text:$value)
+            }
+        }
+    }
+}
+
+
+struct FormWithValidatorV1_5 : View {
+
+    @EnvironmentObject var item:DataItem // data model reference
+
+    @StateObject var usernameValid = FieldChecker2<String>() // validation state of username field
+    @StateObject var passwordValid = FieldChecker2<String>() // validation state of password field
+
+    func username() -> some View {
+
+        TextField( "give me the email",
+                   text: $item.username.onValidate(checker: usernameValid) { v in
+                        // validation closure where ‘v’ is the current value
+                        if( v.isEmpty ) {
+                            return "email cannot be empty"
+                        }
+                        if( !v.isEmail() ) {
+                            return "email is not in correct format"
+                        }
+                        return nil
+                   }, onCommit: submit)
+                .autocapitalization(.none)
+                .padding( .bottom, 25 )
+                .modifier( ValidatorMessageModifier(message: usernameValid.errorMessage))
+    }
+
+    func passwordToggle() -> some View  {
+
+        SecureField( "give me the password",
+            text:$item.password.onValidate( checker: passwordValid ) { v in
+                if( v.isEmpty ) {
+                    return "password cannot be empty"
+                }
+                return nil
+            } )
+        .autocapitalization(.none)
+        .padding( .bottom, 25  )
+        .modifier( ValidatorMessageModifier(message: usernameValid.errorMessage))
+    }
+
+    var isValid:Bool {
+      passwordValid.valid && usernameValid.valid
+    }
+
+    func submit() {
+        if( isValid ) {
+            print( "submit:\nusername:\(self.item.username)\npassword:\(self.item.password)")
+        }
+    }
+
+    var body: some View {
+
+        NavigationView {
+        Form {
+
+            Section(header: Text("Credentials")) {
+                username()
+                passwordToggle()
+            } // end of section
+
+            Section {
+
+                HStack {
+                    Spacer()
+                    Button( "Submit", action: submit )
+                    // enable button only if username and password are validb
+                    .disabled( !self.isValid )
+                    Spacer()
+
+                }
+            } // end of section
+
+        } // end of form
+       .navigationBarTitle( Text( "Validation 1.5 Sample" ), displayMode: .inline  )
+        } // NavigationView
+    }
+}
+
+```
+
+### Version 1.4.x
+
 ```swift
 
 struct FormWithValidatorV1 : View {
