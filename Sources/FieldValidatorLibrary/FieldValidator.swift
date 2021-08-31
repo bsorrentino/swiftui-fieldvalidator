@@ -11,8 +11,68 @@ import Combine
 
 
 //
-// MARK:  FIELD VALIDATION VERSION 1 - (DEPRECATED)
+// MARK:  FIELD VALIDATION
 //
+@available(iOS 13, *)
+public class FieldChecker2<T : Hashable> : ObservableObject {
+
+    internal var numberOfCheck = 0
+    @Published fileprivate(set) var errorMessage:String?
+
+    internal var boundSub:AnyCancellable?
+    fileprivate var subject = PassthroughSubject<T,Never>()
+
+    public var isFirstCheck:Bool { numberOfCheck == 0 }
+
+    public var valid:Bool {
+         self.errorMessage == nil
+    }
+
+    public init( errorMessage:String? = nil ) {
+        self.errorMessage = errorMessage
+    }
+
+    fileprivate func bind( to value:T, andValidateWith validator:@escaping(T) -> String? ) {
+        if boundSub == nil  {
+//            print( "bind( to: )")
+            boundSub = subject.debounce(for: .milliseconds(700), scheduler: RunLoop.main)
+                        .sink {
+//                            print( "validate: \($0)" )
+                            self.errorMessage = validator( $0 )
+                            self.numberOfCheck += 1
+
+                        }
+            // First Validation
+            self.errorMessage = validator( value )
+        }
+    }
+
+    fileprivate func doValidate( value newValue:T ) -> Void {
+        self.subject.send(newValue)
+
+    }
+
+}
+
+extension Binding where Value : Hashable {
+
+    func onValidate( checker:FieldChecker2<Value>, debounceInMills:Int = 0, validator:@escaping (Value) -> String? ) -> Binding<Value> {
+
+        DispatchQueue.main.async {
+            checker.bind(to: self.wrappedValue, andValidateWith: validator)
+        }
+        return Binding(
+            get: { self.wrappedValue },
+            set: { newValue in
+
+                if( newValue != self.wrappedValue) {
+                    checker.doValidate(value: newValue )
+                }
+                self.wrappedValue = newValue
+            }
+        )
+    }
+}
 
 @available(iOS 13, *)
 public struct FieldChecker {
@@ -24,7 +84,8 @@ public struct FieldChecker {
 
     public var valid:Bool {
          self.errorMessage == nil
-     }
+    }
+
     public init( errorMessage:String? = nil ) {
         self.errorMessage = errorMessage
     }

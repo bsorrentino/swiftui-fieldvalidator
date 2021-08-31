@@ -5,74 +5,93 @@
 //  Created by Bartolomeo Sorrentino on 29/08/21.
 //  Copyright © 2021 bsorrentino. All rights reserved.
 //
-
 import SwiftUI
 import Combine
 
-
-struct PasswordToggleFieldV2 : View {
-    @Binding var value:String
-    var hidden:Bool
-
-    var body: some View {
-        if( hidden ) {
-            SecureField( "give me the password", text: $value)
+struct ValidatorMessageModifier: ViewModifier {
+    
+    var message:String?
+    
+    var msg: some View {
+        HStack {
+            Text( message ?? "")
+            .fontWeight(.light)
+            .font(.footnote)
+            .foregroundColor(Color.red)
+            
+            if message != nil  {
+                Image( systemName: "exclamationmark.triangle")
+                    .foregroundColor(Color.red)
+                    .font(.footnote)
+            }
         }
-        else {
-            TextField( "give me the password", text: $value)
-        }
+    }
+
+    func body(content: Content) -> some View {
+        return content.overlay( msg, alignment: .bottom )
     }
 }
 
-func usernameValididator( _ v:String ) -> String? {
-    // validation closure where ‘v’ is the current value
-                              
-       if( v.isEmpty ) {
-           return "email cannot be empty"
-       }
-       if( !v.isEmail() ) {
-           return "email is not in correct format"
-       }
-
-       return nil
-}
-
-func passwordValididator( _ v:String ) -> String? {
-    // validation closure where ‘v’ is the current value
-                              
-    if( v.isEmpty ) {
-        return "password cannot be empty"
-    }
-    return nil
-}
 
 struct FormWithValidatorV2 : View {
-    @EnvironmentObject var item:DataItem// data model reference
     
-    @StateObject var username = FieldValidatorX<String>( debounceInMills: 700, validator: usernameValididator )
-    @StateObject var password = FieldValidatorX<String>( validator: passwordValididator)
+    struct PasswordToggleField : View {
+        @Binding var value:String
+        @Binding var hidden:Bool
+        
+        var body: some View {
+            Group {
+                if( hidden ) {
+                    SecureField( "give me the password", text:$value)
+                }
+                else {
+                    TextField( "give me the password", text:$value)
+                }
+            }
+        }
+    }
+
+    @EnvironmentObject var item:DataItem // data model reference
+
+    @StateObject var usernameValid = FieldChecker2<String>() // validation state of username field
+    @StateObject var passwordValid = FieldChecker2<String>() // validation state of password field
     @State var passwordHidden = true
-      
+        
+    /**
+        
+     */
     
-    func usernameView() -> some View {
+    func username() -> some View {
 
         TextField( "give me the email",
-                   text: $item.username,
-                   onCommit: submit)
-            .autocapitalization(.none)
-            .padding( .bottom, 25 )
-            .overlay( ValidatorMessageInline( message: username.errorMessageOrNilAtBeginning ), alignment: .bottom)
+                   text: $item.username.onValidate(checker: usernameValid) { v in
+                        // validation closure where ‘v’ is the current value
+                        if( v.isEmpty ) {
+                            return "email cannot be empty"
+                        }
+                        if( !v.isEmail() ) {
+                            return "email is not in correct format"
+                        }
+                        return nil
+                   }, onCommit: submit)
+                .autocapitalization(.none)
+                .padding( .bottom, 25 )
+                .modifier( ValidatorMessageModifier(message: usernameValid.errorMessage))
 
     }
     
-    func passwordToggleView() -> some View  {
+    func passwordToggle() -> some View  {
         
         HStack {
-            PasswordToggleFieldV2( value:$item.password, hidden:passwordHidden )
+            PasswordToggleField( value:$item.password.onValidate( checker: passwordValid ) { v in
+                    if( v.isEmpty ) {
+                        return "password cannot be empty"
+                    }
+                    return nil
+                }, hidden:$passwordHidden )
             .autocapitalization(.none)
             .padding( .bottom, 25  )
-            .overlay( ValidatorMessageInline( message: password.errorMessage/*OrNilAtBeginning*/ ),alignment: .bottom)
-
+            
             Button( action: { self.passwordHidden.toggle() }) {
                 Group {
                     if( passwordHidden ) {
@@ -85,18 +104,18 @@ struct FormWithValidatorV2 : View {
                 .foregroundColor(Color.black)
             }
             
-        }
+        }.modifier( ValidatorMessageModifier(message: usernameValid.errorMessage))
         
         
     }
     
     var isValid:Bool {
-        password.valid && username.valid
+        passwordValid.valid && usernameValid.valid
     }
     
     func submit() {
         if( isValid ) {
-            print( "\nusername:\(item.username)\npassword:\(item.password)")
+            print( "submit:\nusername:\(self.item.username)\npassword:\(self.item.password)")
         }
     }
     
@@ -106,21 +125,15 @@ struct FormWithValidatorV2 : View {
         Form {
             
             Section(header: Text("Credentials")) {
-                
-                usernameView()
-                
-                passwordToggleView()
-                
+                username()
+                passwordToggle()
             } // end of section
             
             Section {
                 
                 HStack {
                     Spacer()
-                    Button( "Submit" ) {
-                        
-                        self.submit()
-                    }
+                    Button( "Submit", action: submit )
                     // enable button only if username and password are validb
                     .disabled( !self.isValid )
                     Spacer()
@@ -130,19 +143,23 @@ struct FormWithValidatorV2 : View {
             
         } // end of form
        .navigationBarTitle( Text( "Sample Form" ), displayMode: .inline  )
-        .onAppear {
-            username.bind(to: item.$username )
-            password.bind(to: item.$password )
-        }
         } // NavigationView
     }
 }
 
-
-
-
-struct FormWithValidator2_Previews: PreviewProvider {
+#if DEBUG
+struct FormVithValidatorV2_Previews: PreviewProvider {
     static var previews: some View {
-        FormWithValidatorV2()
+        Group {
+            FormWithValidatorV1()
+                .environment(\.colorScheme, .light)
+                .environmentObject( DataItem() )
+            FormWithValidatorV1()
+                .environment(\.colorScheme, .dark)
+                .environmentObject( DataItem() )
+         }
+
+        
     }
 }
+#endif
