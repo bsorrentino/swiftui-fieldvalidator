@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "FieldValidatorLibrary"
-  spec.version      = "1.4.1"
+  spec.version      = "1.5.0"
   spec.summary      = "SwiftUI library supporting 'Form Validation'"
 
   # This description is used to generate tags and improve search results.
@@ -81,7 +81,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/bsorrentino/swiftui-fieldvalidator.git", :tag => "v1.4.1" }
+  spec.source       = { :git => "https://github.com/bsorrentino/swiftui-fieldvalidator.git", :tag => "v1.5.0" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
