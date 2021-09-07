@@ -47,9 +47,16 @@ public class FieldChecker2<T : Hashable> : ObservableObject {
         }
     }
 
-    fileprivate func doValidate( value newValue:T ) -> Void {
+    public func doValidate( value newValue:T ) -> Void {
         self.subject.send(newValue)
 
+    }
+
+}
+
+extension FieldChecker2 {
+    public var errorMessageOrNilAtBeginning:String?  {
+        self.isFirstCheck ? nil : errorMessage
     }
 
 }
