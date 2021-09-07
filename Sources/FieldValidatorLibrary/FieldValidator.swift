@@ -17,7 +17,7 @@ import Combine
 public class FieldChecker2<T : Hashable> : ObservableObject {
 
     internal var numberOfCheck = 0
-    @Published fileprivate(set) var errorMessage:String?
+    @Published public fileprivate(set) var errorMessage:String?
 
     internal var boundSub:AnyCancellable?
     fileprivate var subject = PassthroughSubject<T,Never>()
