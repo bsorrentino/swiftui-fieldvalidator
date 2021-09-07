@@ -19,7 +19,7 @@ This Library is compatible with [Cocoapods](https://cocoapods.org).
 
 In your **Podfile** add
 ```
-pod 'FieldValidatorLibrary', '~> 1.4.1'
+pod 'FieldValidatorLibrary', '~> 1.5.0'
 ```
 
 ## Sample
@@ -37,7 +37,7 @@ struct FormWithValidatorV1_5 : View {
     func username() -> some View {
 
         TextField( "give me the email",
-                   text: $item.username.onValidate(checker: usernameValid) { v in
+                   text: $item.username.onValidate(checker: usernameValid, debounceInMills: 500) { v in
                         // validation closure where ‘v’ is the current value
                         if( v.isEmpty ) {
                             return "email cannot be empty"

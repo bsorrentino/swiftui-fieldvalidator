@@ -17,7 +17,7 @@ import Combine
 public class FieldChecker2<T : Hashable> : ObservableObject {
 
     internal var numberOfCheck = 0
-    @Published fileprivate(set) var errorMessage:String?
+    @Published public fileprivate(set) var errorMessage:String?
 
     internal var boundSub:AnyCancellable?
     fileprivate var subject = PassthroughSubject<T,Never>()
@@ -32,10 +32,10 @@ public class FieldChecker2<T : Hashable> : ObservableObject {
         self.errorMessage = errorMessage
     }
 
-    fileprivate func bind( to value:T, andValidateWith validator:@escaping(T) -> String? ) {
+    fileprivate func bind( to value:T, debounceInMills debounce:Int, andValidateWith validator:@escaping(T) -> String? ) {
         if boundSub == nil  {
 //            print( "bind( to: )")
-            boundSub = subject.debounce(for: .milliseconds(700), scheduler: RunLoop.main)
+            boundSub = subject.debounce(for: .milliseconds(debounce), scheduler: RunLoop.main)
                         .sink {
 //                            print( "validate: \($0)" )
                             self.errorMessage = validator( $0 )
@@ -56,10 +56,10 @@ public class FieldChecker2<T : Hashable> : ObservableObject {
 
 extension Binding where Value : Hashable {
 
-    func onValidate( checker:FieldChecker2<Value>, debounceInMills:Int = 0, validator:@escaping (Value) -> String? ) -> Binding<Value> {
+    public func onValidate( checker:FieldChecker2<Value>, debounceInMills debounce:Int = 0, validator:@escaping (Value) -> String? ) -> Binding<Value> {
 
         DispatchQueue.main.async {
-            checker.bind(to: self.wrappedValue, andValidateWith: validator)
+            checker.bind(to: self.wrappedValue, debounceInMills: debounce, andValidateWith: validator)
         }
         return Binding(
             get: { self.wrappedValue },
@@ -94,7 +94,7 @@ public struct FieldChecker {
 
 extension FieldChecker {
 
-    var errorMessageOrNilAtBeginning:String?  {
+    public var errorMessageOrNilAtBeginning:String?  {
         self.isFirstCheck ? nil : errorMessage
     }
 }
