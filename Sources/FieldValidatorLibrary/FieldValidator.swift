@@ -56,7 +56,7 @@ public class FieldChecker2<T : Hashable> : ObservableObject {
 
 extension Binding where Value : Hashable {
 
-    func onValidate( checker:FieldChecker2<Value>, debounceInMills debounce:Int = 0, validator:@escaping (Value) -> String? ) -> Binding<Value> {
+    public func onValidate( checker:FieldChecker2<Value>, debounceInMills debounce:Int = 0, validator:@escaping (Value) -> String? ) -> Binding<Value> {
 
         DispatchQueue.main.async {
             checker.bind(to: self.wrappedValue, debounceInMills: debounce, andValidateWith: validator)
@@ -94,7 +94,7 @@ public struct FieldChecker {
 
 extension FieldChecker {
 
-    var errorMessageOrNilAtBeginning:String?  {
+    public var errorMessageOrNilAtBeginning:String?  {
         self.isFirstCheck ? nil : errorMessage
     }
 }
