@@ -11,29 +11,90 @@ import Combine
 
 
 //
-// MARK:  FIELD VALIDATION VERSION 1 - (DEPRECATED)
+// MARK:  FIELD VALIDATION
 //
-
 @available(iOS 13, *)
-public struct FieldChecker {
-    
+public class FieldChecker2<T : Hashable> : ObservableObject {
+
     internal var numberOfCheck = 0
-    public var errorMessage:String?
-    
+    @Published public fileprivate(set) var errorMessage:String?
+
+    internal var boundSub:AnyCancellable?
+    fileprivate var subject = PassthroughSubject<T,Never>()
+
     public var isFirstCheck:Bool { numberOfCheck == 0 }
 
     public var valid:Bool {
          self.errorMessage == nil
-     }
+    }
+
     public init( errorMessage:String? = nil ) {
         self.errorMessage = errorMessage
     }
-    
+
+    fileprivate func bind( to value:T, debounceInMills debounce:Int, andValidateWith validator:@escaping(T) -> String? ) {
+        if boundSub == nil  {
+//            print( "bind( to: )")
+            boundSub = subject.debounce(for: .milliseconds(debounce), scheduler: RunLoop.main)
+                        .sink {
+//                            print( "validate: \($0)" )
+                            self.errorMessage = validator( $0 )
+                            self.numberOfCheck += 1
+
+                        }
+            // First Validation
+            self.errorMessage = validator( value )
+        }
+    }
+
+    fileprivate func doValidate( value newValue:T ) -> Void {
+        self.subject.send(newValue)
+
+    }
+
+}
+
+extension Binding where Value : Hashable {
+
+    public func onValidate( checker:FieldChecker2<Value>, debounceInMills debounce:Int = 0, validator:@escaping (Value) -> String? ) -> Binding<Value> {
+
+        DispatchQueue.main.async {
+            checker.bind(to: self.wrappedValue, debounceInMills: debounce, andValidateWith: validator)
+        }
+        return Binding(
+            get: { self.wrappedValue },
+            set: { newValue in
+
+                if( newValue != self.wrappedValue) {
+                    checker.doValidate(value: newValue )
+                }
+                self.wrappedValue = newValue
+            }
+        )
+    }
+}
+
+@available(iOS 13, *)
+public struct FieldChecker {
+
+    internal var numberOfCheck = 0
+    public var errorMessage:String?
+
+    public var isFirstCheck:Bool { numberOfCheck == 0 }
+
+    public var valid:Bool {
+         self.errorMessage == nil
+    }
+
+    public init( errorMessage:String? = nil ) {
+        self.errorMessage = errorMessage
+    }
+
 }
 
 extension FieldChecker {
-    
-    var errorMessageOrNilAtBeginning:String?  {
+
+    public var errorMessageOrNilAtBeginning:String?  {
         self.isFirstCheck ? nil : errorMessage
     }
 }
@@ -41,10 +102,10 @@ extension FieldChecker {
 @available(iOS 13, *)
 public class FieldValidator<T> : ObservableObject where T : Hashable {
     public typealias Validator = (T) -> String?
-    
+
     @Binding private var bindValue:T
     @Binding private var checker:FieldChecker
-    
+
     @Published public var value:T
     {
         willSet {
@@ -57,25 +118,25 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
         }
     }
     private let validator:Validator
-    
+
     public var isValid:Bool { self.checker.valid }
-    
+
     public var errorMessage:String? { self.checker.errorMessage }
-    
+
     public init( _ value:Binding<T>, checker:Binding<FieldChecker>, validator:@escaping Validator  ) {
         self.validator = validator
         self._bindValue = value
         self.value = value.wrappedValue
         self._checker = checker
     }
-    
+
     fileprivate func doValidate( value newValue:T ) -> Void {
         DispatchQueue.main.async {
             self.checker.errorMessage = self.validator( newValue )
             self.checker.numberOfCheck += 1
         }
     }
-    
+
     public func doValidate() -> Void {
         DispatchQueue.main.async {
             self.checker.errorMessage = self.validator( self.value )
@@ -89,11 +150,11 @@ public class FieldValidator<T> : ObservableObject where T : Hashable {
 @available(iOS 13, *)
 protocol ViewWithFieldValidator : View {
     var field:FieldValidator<String> {get}
-    
+
 }
 
 extension ViewWithFieldValidator {
-    
+
     internal func execIfValid( _ onCommit: @escaping () -> Void ) -> () -> Void {
         return {
             if( self.field.isValid ) {
@@ -138,7 +199,7 @@ public struct TextFieldWithValidator : ViewWithFieldValidator {
                 }
         }
     }
-    
+
 }
 
 @available(iOS 13, *)
@@ -166,7 +227,7 @@ public struct SecureFieldWithValidator : ViewWithFieldValidator {
     }
 
     public var body: some View {
-       
+
         VStack {
             SecureField( title ?? "", text: $field.value, onCommit: execIfValid(self.onCommit) )
                 .onAppear { // run validation on appear

@@ -10,26 +10,30 @@ import SwiftUI
 import Combine
 
 class DataItem: ObservableObject { // observable object
- 
+
     @Published var username:String = "" // observable property
     @Published var password:String = "" // observable property
- 
+
 }
 
 struct ContentView : View {
 
-    
+
     var body: some View {
-        
+
         NavigationView {
         TabView {
-             FormWithValidatorV1()
-                 .environmentObject( DataItem() )
+             FormWithValidatorV1_5()
                  .tabItem {
-                     Label("Form validator", systemImage: "square.and.pencil")
+                     Label("Sample v1.5", systemImage: "square.and.pencil")
                  }
-         }
-       .navigationBarTitle( Text( "FieldValidator Samples" ), displayMode: .inline  )
+            FormWithValidatorV1_4()
+                .tabItem {
+                    Label("Sample v1.4", systemImage: "square.and.pencil")
+                }
+        }
+        .environmentObject( DataItem() )
+        .navigationBarTitle( Text( "FieldValidator Sample" ), displayMode: .inline  )
         } // NavigationView
     }
 }
@@ -38,7 +42,7 @@ struct ContentView : View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-        
+
     }
 }
 #endif

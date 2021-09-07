@@ -19,10 +19,88 @@ This Library is compatible with [Cocoapods](https://cocoapods.org).
 
 In your **Podfile** add
 ```
-pod 'FieldValidatorLibrary', '~> 1.4.1'
+pod 'FieldValidatorLibrary', '~> 1.5.0'
 ```
 
 ## Sample
+
+### Version 1.5.x
+
+```swift
+struct FormWithValidatorV1_5 : View {
+
+    @EnvironmentObject var item:DataItem // data model reference
+
+    @StateObject var usernameValid = FieldChecker2<String>() // validation state of username field
+    @StateObject var passwordValid = FieldChecker2<String>() // validation state of password field
+
+    func username() -> some View {
+
+        TextField( "give me the email",
+                   text: $item.username.onValidate(checker: usernameValid, debounceInMills: 500) { v in
+                        // validation closure where ‘v’ is the current value
+                        if( v.isEmpty ) {
+                            return "email cannot be empty"
+                        }
+                        if( !v.isEmail() ) {
+                            return "email is not in correct format"
+                        }
+                        return nil
+                   }, onCommit: submit)
+                .autocapitalization(.none)
+                .padding( .bottom, 25 )
+                .modifier( ValidatorMessageModifier(message: usernameValid.errorMessage))
+    }
+
+    func passwordToggle() -> some View  {
+
+        SecureField( "give me the password",
+            text:$item.password.onValidate( checker: passwordValid ) { v in
+                if( v.isEmpty ) {
+                    return "password cannot be empty"
+                }
+                return nil
+            } )
+        .autocapitalization(.none)
+        .padding( .bottom, 25  )
+        .modifier( ValidatorMessageModifier(message: usernameValid.errorMessage))
+    }
+
+    var isValid:Bool {
+      passwordValid.valid && usernameValid.valid
+    }
+
+    func submit() {
+        if( isValid ) {
+            print( "submit:\nusername:\(self.item.username)\npassword:\(self.item.password)")
+        }
+    }
+
+    var body: some View {
+        NavigationView {
+        Form {
+            Section(header: Text("Credentials")) {
+                username()
+                passwordToggle()
+            } // end of section
+            Section {
+                HStack {
+                    Spacer()
+                    Button( "Submit", action: submit )
+                    // enable button only if username and password are validb
+                    .disabled( !self.isValid )
+                    Spacer()
+                }
+            } // end of section
+        } // end of form
+       .navigationBarTitle( Text( "Validation 1.5 Sample" ), displayMode: .inline  )
+        } // NavigationView
+    }
+}
+
+```
+
+### Version 1.4.x
 
 ```swift
 
@@ -51,8 +129,7 @@ struct FormWithValidatorV1 : View {
                     }
                     .autocapitalization(.none)
                     .padding( .bottom, 25 )
-                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning )
-                                ,alignment: .bottom)
+                    .modifier( ValidatorMessageModifier(message: usernameValid.errorMessageOrNilAtBeginning ) )
     }
 
     func passwordToggle() -> some View  {
@@ -67,7 +144,8 @@ struct FormWithValidatorV1 : View {
       }
       .autocapitalization(.none)
       .padding( .bottom, 25  )
-      .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessage ),alignment: .bottom)
+      .modifier( ValidatorMessageModifier(message: passwordToggleValid.errorMessage ) )
+
     }
 
     var isValid:Bool {
