@@ -63,7 +63,7 @@ struct FormWithValidatorV1_5 : View {
             } )
         .autocapitalization(.none)
         .padding( .bottom, 25  )
-        .modifier( ValidatorMessageModifier(message: usernameValid.errorMessage))
+        .modifier( ValidatorMessageModifier(message: passwordValid.errorMessage))
     }
 
     var isValid:Bool {
