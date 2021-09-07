@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct ValidatorMessageInline: View {
+struct ValidatorMessageModifier: ViewModifier {
     
     var message:String?
     
-    var body: some View {
+    var msg: some View {
         HStack {
             Text( message ?? "")
             .fontWeight(.light)
@@ -24,8 +24,12 @@ struct ValidatorMessageInline: View {
                     .foregroundColor(Color.red)
                     .font(.footnote)
             }
-            
         }
     }
+
+    func body(content: Content) -> some View {
+        return content.overlay( msg, alignment: .bottom )
+    }
 }
+
 

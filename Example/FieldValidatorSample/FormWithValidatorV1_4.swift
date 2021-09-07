@@ -38,9 +38,8 @@ struct FormWithValidatorV1_4 : View {
                     }
                     .autocapitalization(.none)
                     .padding( .bottom, 25 )
-                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning )
-                                ,alignment: .bottom)
-
+                    .modifier( ValidatorMessageModifier(message: usernameValid.errorMessageOrNilAtBeginning ) )
+                                
     }
     
     func passwordToggle() -> some View  {
@@ -56,7 +55,7 @@ struct FormWithValidatorV1_4 : View {
             }
             .autocapitalization(.none)
             .padding( .bottom, 25  )
-            .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessage ),alignment: .bottom)
+            .modifier( ValidatorMessageModifier(message: passwordToggleValid.errorMessage ) )
             Button( action: {
                 self.passwordHidden.toggle()
             }) {

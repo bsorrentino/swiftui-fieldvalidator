@@ -8,31 +8,6 @@
 import SwiftUI
 import Combine
 
-struct ValidatorMessageModifier: ViewModifier {
-    
-    var message:String?
-    
-    var msg: some View {
-        HStack {
-            Text( message ?? "")
-            .fontWeight(.light)
-            .font(.footnote)
-            .foregroundColor(Color.red)
-            
-            if message != nil  {
-                Image( systemName: "exclamationmark.triangle")
-                    .foregroundColor(Color.red)
-                    .font(.footnote)
-            }
-        }
-    }
-
-    func body(content: Content) -> some View {
-        return content.overlay( msg, alignment: .bottom )
-    }
-}
-
-
 struct FormWithValidatorV1_5 : View {
     
     struct PasswordToggleField : View {
