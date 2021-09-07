@@ -47,8 +47,9 @@ public class FieldChecker2<T : Hashable> : ObservableObject {
         }
     }
 
-    public func doValidate( value newValue:T ) -> Void {
+    public func doValidate( value newValue:T ) -> T {
         self.subject.send(newValue)
+        return newValue
 
     }
 
@@ -72,10 +73,9 @@ extension Binding where Value : Hashable {
             get: { self.wrappedValue },
             set: { newValue in
 
-                if( newValue != self.wrappedValue) {
-                    checker.doValidate(value: newValue )
-                }
-                self.wrappedValue = newValue
+                self.wrappedValue = ( newValue != self.wrappedValue) ?
+                    checker.doValidate(value: newValue ) :
+                    newValue
             }
         )
     }
