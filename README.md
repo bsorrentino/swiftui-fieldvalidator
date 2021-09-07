@@ -27,47 +27,6 @@ pod 'FieldValidatorLibrary', '~> 1.4.1'
 ### Version 1.5.x
 
 ```swift
-struct ValidatorMessageModifier: ViewModifier {
-
-    var message:String?
-
-    var msg: some View {
-        HStack {
-            Text( message ?? "")
-            .fontWeight(.light)
-            .font(.footnote)
-            .foregroundColor(Color.red)
-
-            if message != nil  {
-                Image( systemName: "exclamationmark.triangle")
-                    .foregroundColor(Color.red)
-                    .font(.footnote)
-            }
-        }
-    }
-
-    func body(content: Content) -> some View {
-        return content.overlay( msg, alignment: .bottom )
-    }
-}
-
-struct PasswordToggleField : View {
-    @Binding var value:String
-    @Binding var hidden:Bool
-
-    var body: some View {
-        Group {
-            if( hidden ) {
-                SecureField( "give me the password", text:$value)
-            }
-            else {
-                TextField( "give me the password", text:$value)
-            }
-        }
-    }
-}
-
-
 struct FormWithValidatorV1_5 : View {
 
     @EnvironmentObject var item:DataItem // data model reference
@@ -118,27 +77,21 @@ struct FormWithValidatorV1_5 : View {
     }
 
     var body: some View {
-
         NavigationView {
         Form {
-
             Section(header: Text("Credentials")) {
                 username()
                 passwordToggle()
             } // end of section
-
             Section {
-
                 HStack {
                     Spacer()
                     Button( "Submit", action: submit )
                     // enable button only if username and password are validb
                     .disabled( !self.isValid )
                     Spacer()
-
                 }
             } // end of section
-
         } // end of form
        .navigationBarTitle( Text( "Validation 1.5 Sample" ), displayMode: .inline  )
         } // NavigationView
@@ -176,8 +129,7 @@ struct FormWithValidatorV1 : View {
                     }
                     .autocapitalization(.none)
                     .padding( .bottom, 25 )
-                    .overlay( ValidatorMessageInline( message: usernameValid.errorMessageOrNilAtBeginning )
-                                ,alignment: .bottom)
+                    .modifier( ValidatorMessageModifier(message: usernameValid.errorMessageOrNilAtBeginning ) )
     }
 
     func passwordToggle() -> some View  {
@@ -192,7 +144,8 @@ struct FormWithValidatorV1 : View {
       }
       .autocapitalization(.none)
       .padding( .bottom, 25  )
-      .overlay( ValidatorMessageInline( message: passwordToggleValid.errorMessage ),alignment: .bottom)
+      .modifier( ValidatorMessageModifier(message: passwordToggleValid.errorMessage ) )
+
     }
 
     var isValid:Bool {
