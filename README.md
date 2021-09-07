@@ -37,7 +37,7 @@ struct FormWithValidatorV1_5 : View {
     func username() -> some View {
 
         TextField( "give me the email",
-                   text: $item.username.onValidate(checker: usernameValid) { v in
+                   text: $item.username.onValidate(checker: usernameValid, debounceInMills: 500) { v in
                         // validation closure where ‘v’ is the current value
                         if( v.isEmpty ) {
                             return "email cannot be empty"
