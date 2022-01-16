@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F08836027948A5D00AD9BCD /* FormWithValidator_Issue4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F08835F27948A5D00AD9BCD /* FormWithValidator_Issue4.swift */; };
 		5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486A723568D17007FA51F /* AppDelegate.swift */; };
 		5F4486AA23568D17007FA51F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486A923568D17007FA51F /* SceneDelegate.swift */; };
 		5F4486AC23568D17007FA51F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4486AB23568D17007FA51F /* ContentView.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F08835F27948A5D00AD9BCD /* FormWithValidator_Issue4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormWithValidator_Issue4.swift; sourceTree = "<group>"; };
 		5F4486A423568D17007FA51F /* FieldValidatorSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FieldValidatorSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F4486A723568D17007FA51F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F4486A923568D17007FA51F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 		5F4486A623568D17007FA51F /* FieldValidatorSample */ = {
 			isa = PBXGroup;
 			children = (
+				5F08835F27948A5D00AD9BCD /* FormWithValidator_Issue4.swift */,
 				5F82B3E126DE7C8900D4BB7C /* FormWithValidatorV1_4.swift */,
 				5F82B3E026DE7C8900D4BB7C /* FormWithValidatorV1_5.swift */,
 				5F4486A723568D17007FA51F /* AppDelegate.swift */,
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */,
+				5F08836027948A5D00AD9BCD /* FormWithValidator_Issue4.swift in Sources */,
 				5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */,
 				5F82B3E326DE7C8A00D4BB7C /* FormWithValidatorV1_4.swift in Sources */,
 				A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */,
