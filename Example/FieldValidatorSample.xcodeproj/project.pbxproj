@@ -20,6 +20,7 @@
 		A047652023DDF687005B8547 /* PasswordToggleField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A047651F23DDF687005B8547 /* PasswordToggleField.swift */; };
 		A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */; };
 		A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */; };
+		A083028C2795E46C00C44875 /* NestedObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A083028B2795E46B00C44875 /* NestedObservableObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		A047651F23DDF687005B8547 /* PasswordToggleField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordToggleField.swift; sourceTree = "<group>"; };
 		A0533DC524EAEF9E009C784B /* FieldValidator+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FieldValidator+Helpers.swift"; sourceTree = "<group>"; };
 		A059CE6E26DB8EA9007002F2 /* FieldValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FieldValidator.swift; path = ../Sources/FieldValidatorLibrary/FieldValidator.swift; sourceTree = "<group>"; };
+		A083028B2795E46B00C44875 /* NestedObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedObservableObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 		5F4486A623568D17007FA51F /* FieldValidatorSample */ = {
 			isa = PBXGroup;
 			children = (
+				A083028B2795E46B00C44875 /* NestedObservableObject.swift */,
 				5F08835F27948A5D00AD9BCD /* FormWithValidator_Issue4.swift */,
 				5F82B3E126DE7C8900D4BB7C /* FormWithValidatorV1_4.swift */,
 				5F82B3E026DE7C8900D4BB7C /* FormWithValidatorV1_5.swift */,
@@ -169,6 +172,7 @@
 			files = (
 				A059CE6F26DB8EA9007002F2 /* FieldValidator.swift in Sources */,
 				5F08836027948A5D00AD9BCD /* FormWithValidator_Issue4.swift in Sources */,
+				A083028C2795E46C00C44875 /* NestedObservableObject.swift in Sources */,
 				5F4486A823568D17007FA51F /* AppDelegate.swift in Sources */,
 				5F82B3E326DE7C8A00D4BB7C /* FormWithValidatorV1_4.swift in Sources */,
 				A0533DC624EAEF9E009C784B /* FieldValidator+Helpers.swift in Sources */,

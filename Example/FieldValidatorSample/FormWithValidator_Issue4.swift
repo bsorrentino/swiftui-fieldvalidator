@@ -8,6 +8,17 @@
 import SwiftUI
 import Combine
 
+public class FieldChecker3<T : Hashable> : FieldChecker2<T> {
+
+    public private(set) var validator:(T) -> String?
+
+    public init( errorMessage:String? = nil, validator:@escaping(T) -> String? ) {
+        self.validator = validator
+        super.init( errorMessage: errorMessage )
+    }
+
+}
+
 extension FormWithValidator_Issue4 {
     
     class ViewModel: NSObject, ObservableObject {
@@ -15,9 +26,18 @@ extension FormWithValidator_Issue4 {
         @Published var username:String = "" // observable property
         @Published var password:String = "" // observable property
 
-        var usernameValid = FieldChecker2<String>() // validation state of username field
-        var passwordValid = FieldChecker2<String>() // validation state of username field
-
+        // validation state of username field
+        @NestedObservableObject var usernameValid = FieldChecker3<String>() { v in
+            // validation closure where ‘v’ is the current value
+            if( v.isEmpty ) {
+                return "value cannot be empty"
+            }
+            return nil
+        }
+        
+        @NestedObservableObject var passwordValid = FieldChecker2<String>()
+        
+        /*
         // @ref https://stackoverflow.com/a/58406402/521197
         private var cancellableSet: Set<AnyCancellable> = []
         
@@ -30,6 +50,7 @@ extension FormWithValidator_Issue4 {
                 self?.objectWillChange.send()
             }.store(in: &cancellableSet)
         }
+        */
     }
 }
 
@@ -40,13 +61,10 @@ struct FormWithValidator_Issue4 : View {
     func username() -> some View {
 
         TextField( "give me the email",
-                   text: $viewModel.username.onValidate(checker: viewModel.usernameValid, debounceInMills: 500) { v in
-                        // validation closure where ‘v’ is the current value
-                        if( v.isEmpty ) {
-                            return "value cannot be empty"
-                        }
-                        return nil
-                   }, onCommit: submit)
+                   text: $viewModel.username.onValidate(checker: viewModel.usernameValid,
+                                                        debounceInMills: 500,
+                                                        validator:viewModel.usernameValid.validator),
+                   onCommit: submit)
                 .autocapitalization(.none)
                 .padding( .bottom, 25 )
                 .modifier( ValidatorMessageModifier(message: viewModel.usernameValid.errorMessage))
@@ -58,7 +76,7 @@ struct FormWithValidator_Issue4 : View {
             SecureField( "give me the password",
                          text: $viewModel.password.onValidate( checker: viewModel.passwordValid ) { v in
                             if( v.isEmpty ) {
-                                return "password cannot be empty"
+                                return "password cannot be empty \(viewModel.username)"
                             }
                             return nil
             })
